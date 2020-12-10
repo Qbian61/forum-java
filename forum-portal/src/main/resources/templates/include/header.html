@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title, links, scripts)">
+    <title th:replace="${title}" th:text="${globalConfig.websiteName}">开发者客栈</title>
+    <meta name="baidu-site-verification" content="code-x9mzArq1EX" />
+    <!-- Required meta tags -->
+    <meta name="keywords" content="开发者客栈，开发者社区，开源社区，spring boot开源社区，Java开源社区，社区文章，社区问答" />
+    <meta name="description" content="开发者客栈是基于spring boot开发的一套Java版开源社区，提供写文章，提问题等功能，也可以帮助开发者免费部署供个人学习使用，商业用途需收费。" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" th:href="${globalConfig.websiteFaviconIconUrl}" href="https://static.developers.pub/favicon.ico">
+
+    <!-- cdn server -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/toastr.js/1.3.1/css/toastr.min.css" rel="stylesheet">
+
+    <!-- custom style -->
+    <link href="/css/custom3.css" rel="stylesheet">
+
+    <th:block th:replace="${links}" />
+    <th:block th:replace="${scripts}" />
+</head>
+
+</html>

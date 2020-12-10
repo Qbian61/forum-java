@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title th:text="${user.nickname + ' - ' + globalConfig.websiteName}">个人首页 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_all(~{::content})">
+    <content>
+        <div style="width: 100%;">
+            <div class="row user-info-box">
+                <div class="col-4" style="padding: 0;border-right: 1px solid rgba(0,0,0,.125);">
+                    <div class="d-flex justify-content-center align-self-center" style="height: 110px;padding-top: 15px;">
+                        <img th:alt="${user.nickname}"
+                             th:src="${user.avatar}"
+                             src="https://upload.jianshu.io/users/upload_avatars/19718990/e8504159-2600-4620-b6be-ddaa6fc66457.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
+                             style="width: 80px;height: 80px;border: 1px solid #ddd;border-radius: 50%;"
+                             class="img-fluid" alt="...">
+                    </div>
+                    <div th:text="${user.nickname}"
+                         class="text-center"
+                         style="height: 43px;font-size: 18px;font-weight: 500;line-height: 1.5;">阿崔</div>
+                    <div style="text-align: center;">
+                        <button id="followBtn"
+                                th:data-target="${isLogin ? '' : '#loginModal'}"
+                                th:data-toggle="${isLogin ? '' : 'modal'}"
+                                th:data-has-follow="${hasFollow}"
+                                th:data-followed="${user.id}"
+                                th:text="${hasFollow ? '取消关注' : '关注 TA'}"
+                                th:class="${'btn btn-sm ' + (hasFollow ? 'btn-secondary' : 'btn-primary')}">关注 TA</button>
+                        <button th:if="${isLogin && user.id == loginUser.id}"
+                                data-target="#updateModal"
+                                data-toggle="modal"
+                                type="button"
+                                class="btn btn-outline-primary btn-sm user-edit-btn">编辑</button>
+                    </div>
+                </div>
+                <div class="col-8" style="padding: 0;">
+                    <div class="user-info-date-box">
+                        <p style="margin-right: 40px;">注册日期：<span th:text="${#dates.format(user.createAt, 'yyyy-MM-dd')}">2020-10-1</span></p>
+                        <p>上次登录日期：<span th:text="${#dates.format(user.lastLoginTime, 'yyyy-MM-dd')}">2020-10-1</span></p>
+                    </div>
+                    <div class="user-info-desc-box">
+                        <p style="margin-bottom: 8px;">个人简介</p>
+                        <p th:text="${user.signature}" style="font-size: 13px;line-height: 24px;">又是深夜了</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </content>
+</div>
+
+<div th:replace="include/container :: container_both(~{::left}, ~{::right})">
+    <left>
+        <!-- 类别筛选 -->
+        <div th:replace="include/type-btns :: type_btns(${typeList})"></div>
+
+        <!-- 帖子列表 -->
+        <div th:replace="include/article-list :: article_list(${articleList}, false, ${pager})"></div>
+    </left>
+    <right>
+        <!-- 关注 -->
+        <div th:replace="include/users-card :: users_card('关注', '#', ${followerList})"></div>
+
+        <!-- 粉丝 -->
+        <div th:replace="include/users-card :: users_card('粉丝', '#', ${fansList})"></div>
+    </right>
+</div>
+
+<!-- 编辑个人信息 Modal -->
+<div th:if="${isLogin && user.id == loginUser.id}" class="modal fade" id="updateModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="updateModalDropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalDropLabel">更新个人信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="userEmail">邮箱</label>
+                    <input th:value="${user.email}" id="userEmail" type="email" class="form-control" placeholder="登录邮箱（用于接收账号激活邮件）" />
+                </div>
+                <div class="form-group">
+                    <label for="userNickname">昵称</label>
+                    <input id="userNickname" th:value="${user.nickname}" type="text" class="form-control" placeholder="给自己起个昵称呗（10字以内）" />
+                </div>
+                <div class="form-group">
+                    <label for="userSignature">个人简介</label>
+                    <textarea id="userSignature"
+                              rows="3"
+                              th:text="${user.signature}"
+                              class="form-control"
+                              placeholder="介绍下自己吧（50字以内）"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="updateUserBtn" type="button" class="btn btn-primary">更新</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#updatePwdModal">更新登录密码</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 更新密码 Modal -->
+<div th:if="${isLogin && user.id == loginUser.id}" class="modal fade" id="updatePwdModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="updatePwdModalDropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePwdModalDropLabel">更新登录密码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="oldPwd">旧密码</label>
+                    <input id="oldPwd" type="password" class="form-control" placeholder="请输入旧密码" />
+                </div>
+                <div class="form-group">
+                    <label for="newPwd">新密码</label>
+                    <input id="newPwd" type="password" class="form-control" placeholder="请输入新密码" />
+                </div>
+                <div class="form-group">
+                    <label for="newPwd2">确认新密码</label>
+                    <input id="newPwd2" type="password" class="form-control" placeholder="请再次输入新密码" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="updatePwdBtn" type="button" class="btn btn-primary">更新</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#updateModal">更新个人信息</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+<script>
+    // 更新个人信息
+    $('#updateUserBtn').on('click', function () {
+        var email = $('#userEmail').val();
+        if (!email) {
+            toastr.error('邮箱不能为空');
+            return;
+        }
+        if (email.indexOf('@') < 0) {
+            toastr.error('请输入正确的邮箱格式');
+            return;
+        }
+
+        var nickname = $('#userNickname').val();
+        if (!nickname) {
+            toastr.error('昵称不能为空');
+            return;
+        }
+        if (nickname.length > 10) {
+            toastr.error('昵称不能超过10个字符');
+            return;
+        }
+
+        var userSignature = $('#userSignature').val();
+        if (!userSignature && userSignature.length > 50) {
+            toastr.error('个人简介不能超过50个字符');
+            return;
+        }
+
+        post('/user-rest/update-info', {
+            'email': email,
+            'nickname': nickname,
+            'signature': userSignature
+        }, function (data) {
+            toastr.success('更新成功');
+            setTimeout(function () {
+                location.reload();
+            }, 500);
+        });
+    });
+    // 更新密码信息
+    $('#updatePwdBtn').on('click', function () {
+        var oldPwd = $('#oldPwd').val();
+        if (!oldPwd) {
+            toastr.error('旧密码不能为空');
+            return;
+        }
+
+        var newPwd = $('#newPwd').val();
+        if (!newPwd) {
+            toastr.error('新密码不能为空');
+            return;
+        }
+
+        var newPwd2 = $('#newPwd2').val();
+        if (!newPwd2) {
+            toastr.error('确认新密码不能为空');
+            return;
+        }
+
+        if (newPwd !== newPwd2) {
+            toastr.error('新密码与确认密码不一致，请重新输入');
+            return;
+        }
+
+        post('/user-rest/update-pwd', {
+            'oldPassword': md5(oldPwd),
+            'newPassword': md5(newPwd)
+        }, function (data) {
+            toastr.success('更新成功');
+            setTimeout(function () {
+                location.reload();
+            }, 500);
+        });
+    });
+</script>
+</body>
+</html>

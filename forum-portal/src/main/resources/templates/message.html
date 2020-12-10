@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title th:text="${'消息 - ' + globalConfig.websiteName}">消息 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_all(~{::content})">
+    <content>
+        <!-- 类别筛选 -->
+        <div th:replace="include/type-btns :: type_btns(${typeList})"></div>
+
+        <div class="list-group">
+            <!-- 空消息 -->
+            <div th:if="${#lists.isEmpty(messageList)}"
+                 th:include="include/custom-empty :: custom_empty('')"
+                 class="list-group-item list-group-item-action"></div>
+
+            <div th:if="${!#lists.isEmpty(messageList)}"
+                 th:each="msg : ${messageList}"
+                 class="list-group-item list-group-item-action" style="padding-top: 10px;padding-bottom: 10px;">
+                <div style="width: 100%;">
+                    <div style="float: left;width: 80px;height: 60px;padding-top: 5px;">
+                        <div th:class="${msg.read == 'NO' ? 'custom-theme-bg-color' : ''}"
+                             style="float: left;margin-right: 10px;margin-top: 22px;width: 5px;height: 5px;border-radius: 50%;"></div>
+                        <img th:src="${msg.senderAvatar}"
+                             src="https://www.gravatar.com/avatar/6455e40915d4eac16ed07145a63ab474?d=retro"
+                             style="width: 50px;height: 50px;border-radius: 50%" />
+                    </div>
+                    <div style="float: right;width: calc(100% - 80px);height: 60px;">
+                        <div style="height: 30px;">
+                            <a th:text="${msg.senderName}"
+                               th:href="${'/user/' + msg.sender}"
+                               target="_blank"
+                               class="posts-list-title" style="font-size: 15px;">qbian</a>&nbsp;&nbsp;&nbsp;
+                            <span th:text="${msg.typeDesc}" style="font-size: 12px;">关注</span>&nbsp;&nbsp;&nbsp;
+                            <a th:text="${msg.title}"
+                               th:href="${msg.infoAction}"
+                               target="_blank"
+                               class="posts-list-title" style="font-size: 15px;">qbian</a>
+                        </div>
+                        <div class="posts-list-payload-box" style="height: 30px;margin-top: 0;">
+                            <small class="text-muted">
+                                <i data-feather="clock" style="width: 14px;height: 14px;"></i>&nbsp;
+                                <span th:text="${#dates.format(msg.createAt, 'yyyy-MM-dd')}">3天前</span>
+                            </small>
+                            <small th:if="${msg.read == 'NO'}" class="text-muted" style="float: right;">
+                                <a class="mark-msg-is-read" th:data-id="${msg.id}" href="javascript:;">标记为已读</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分页 -->
+        <div th:replace="include/page :: page(${pager})"></div>
+    </content>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+<script>
+    $('.mark-msg-is-read').on('click', function (e) {
+        post('/message-rest/mark-is-read/' + this.dataset.id, {}, function () {
+            location.reload();
+        });
+    });
+</script>
+</body>
+</html>

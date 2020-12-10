@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 分页 -->
+<nav th:fragment="page(pager)" aria-label="Page navigation example">
+    <ul class="pagination justify-content-end page-box">
+        <li th:class="${'page-item' + (pager.first ? ' disabled' : '')}" class="page-item disabled">
+            <a th:aria-disabled="${pager.first ? 'true' : ''}"
+               th:href="${pager.pre}"
+               class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+        </li>
+        <li th:if="${pager.preMore}" class="page-item">
+            <a th:href="${pager.firstNoHref}" class="page-link" href="#">1</a>
+        </li>
+        <li th:if="${pager.preMore}" class="page-item disabled">
+            <a class="page-link" href="#">...</a>
+        </li>
+
+        <li th:each="page : ${pager.pages}"
+            th:class="${'page-item ' + page.no == pager.current ? 'active' : ''}"
+            th:aria-current="${page.no == pager.current ? 'page' : ''}"
+            class="page-item">
+            <a th:if="${page.no != pager.current}"
+               th:text="${page.no}"
+               th:href="${page.href}"
+               class="page-link" href="#">1</a>
+            <span th:if="${page.no == pager.current}"
+                  th:text="${page.no}"
+                  class="page-link current-page">
+                </span>
+        </li>
+
+        <li th:if="${pager.nextMore}" class="page-item disabled">
+            <a class="page-link" href="#">...</a>
+        </li>
+        <li th:if="${pager.nextMore}" class="page-item">
+            <a th:text="${pager.lastNo}" th:href="${pager.lastNoHref}" class="page-link" href="#">1</a>
+        </li>
+        <li th:class="${'page-item' + (pager.last ? ' disabled' : '')}" class="page-item disabled">
+            <a th:aria-disabled="${pager.last ? 'true' : ''}"
+               th:href="${pager.next}"
+               class="page-link" href="#">&raquo;</a>
+        </li>
+    </ul>
+</nav>
+
+</html>

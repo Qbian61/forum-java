@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<footer th:fragment="footer">
+    <div class="foot custom-bg-color">
+        <ul class="foot-link">
+            <li><a class="text-reset" href="javascript:;">在线人数：<span th:text="${onlineUsers}"></span></a></li>
+            <!--<li><a class="text-reset" href="https://www.developers.pub/blog" target="_blank">博客文章</a></li>-->
+            <li th:text="${globalConfig.websiteStartYear} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ' © ' + ${globalConfig.websiteRecord}">2016-2020 © developers 皖ICP备17014120号</li>
+        </ul>
+    </div>
+
+    <!-- cdn server -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/toastr.js/1.3.1/js/toastr.min.js"></script>
+
+    <!-- custom js -->
+    <script src="/js/md5.min.js"></script>
+    <script src="/js/common2.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</footer>
+
+</html>

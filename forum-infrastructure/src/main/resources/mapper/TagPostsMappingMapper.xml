@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.TagPostsMappingDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.TagPostsMappingDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="tag_id" property="tagId"/>
+        <result column="posts_id" property="postsId"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        tag_id, posts_id
+    </sql>
+
+    <sql id="table_name">forum_tag_posts_mapping</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="isDelete != null">
+                and is_delete #{isDelete}
+            </if>
+            <if test="tagId != null">
+                and tag_id = #{tagId}
+            </if>
+            <if test="postsId != null">
+                and posts_id = #{postsId}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.TagPostsMappingDO">
+        INSERT INTO <include refid="table_name"/>
+        ( tag_id, posts_id, create_at )
+        VALUES
+        (
+        #{tagId},
+        #{postsId},
+        #{createAt}
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO <include refid="table_name"/>
+        ( tag_id, posts_id, create_at )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.tagId},
+            #{item.postsId},
+            #{item.createAt}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryInPostsIds" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where posts_id IN
+        <foreach collection="postsIds" item="postsId" open="(" separator="," close=")">
+            #{postsId}
+        </foreach>
+    </select>
+
+    <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.TagPostsMappingDO" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY create_at DESC
+    </select>
+
+    <delete id="deleteByPostsId">
+        delete FROM <include refid="table_name"/>
+        where posts_id = #{postsId}
+    </delete>
+
+</mapper>

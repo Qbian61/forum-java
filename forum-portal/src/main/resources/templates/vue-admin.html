@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title>管理后台 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_all(~{::content})">
+    <content>
+        <div style="background-color: #fff;text-align: center;height: 700px;margin-bottom: 20px;padding-top: 265px;">
+            <p>
+                <span style="font-size: 30px;">如需部署，请添加官方微信（developers_pub），联系官方获得管理后台相关功能！！！</span>
+            </p>
+        </div>
+    </content>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+</body>
+</html>

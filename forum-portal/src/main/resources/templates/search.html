@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title th:text="${'搜索 - ' + globalConfig.websiteName}">搜索 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_all(~{::content})">
+    <content>
+        <div class="tag-box">
+            <div style="text-align: center;color: #666;">
+                搜索关键词：<span th:text="${key}" style="font-size: 25px;line-height: 30px;font-weight: 700;margin-bottom: .3rem;"></span>
+            </div>
+        </div>
+
+        <!-- 帖子列表 -->
+        <div th:replace="include/article-list :: article_list(${postsList}, true, ${pager})"></div>
+    </content>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.MessageDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.MessageDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="channel" property="channel"/>
+        <result column="type" property="type"/>
+        <result column="read" property="read"/>
+        <result column="sender_type" property="senderType"/>
+        <result column="sender" property="sender"/>
+        <result column="receiver_type" property="receiverType"/>
+        <result column="receiver" property="receiver"/>
+        <result column="title" property="title"/>
+        <result column="content_type" property="contentType"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        channel, type, `read`, sender_type, sender, receiver_type, receiver, title, content_type, content
+    </sql>
+
+    <sql id="table_name">forum_message</sql>
+
+    <sql id="where_clause_do">
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="channel != null">
+                and channel = #{channel}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="sender != null">
+                and sender = #{sender}
+            </if>
+            <if test="receiver != null">
+                and receiver = #{receiver}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.MessageDO">
+        INSERT INTO <include refid="table_name"/>
+        (channel, type, `read`, sender_type, sender, receiver_type, receiver, title, content_type, content, create_at, update_at)
+        VALUES
+        (
+        #{channel},
+        #{type},
+        #{read},
+        #{senderType},
+        #{sender},
+        #{receiverType},
+        #{receiver},
+        #{title},
+        #{contentType},
+        #{content},
+        #{createAt},
+        #{updateAt}
+        )
+    </insert>
+
+    <select id="get" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where id = #{id}
+    </select>
+
+    <select id="query" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY create_at DESC
+    </select>
+
+    <select id="updateToRead" parameterType="pub.developers.forum.infrastructure.dal.dataobject.MessageDO">
+        update <include refid="table_name"/>
+        set `read` = #{read}
+        where id = #{id}
+    </select>
+
+    <select id="countUnRead" resultType="long">
+        select count(*)
+        FROM <include refid="table_name"/>
+        where receiver = #{receiver}
+        and `read` = #{read}
+    </select>
+
+    <delete id="deleteInTypesAndTitle">
+        delete FROM <include refid="table_name"/>
+        where title = #{title}
+        and type IN
+        <foreach collection="types" item="type" open="(" separator="," close=")">
+            #{type}
+        </foreach>
+    </delete>
+</mapper>

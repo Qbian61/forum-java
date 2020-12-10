@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.UserDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.UserDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="role" property="role"/>
+        <result column="state" property="state"/>
+        <result column="nickname" property="nickname"/>
+        <result column="sex" property="sex"/>
+        <result column="avatar" property="avatar"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="signature" property="signature"/>
+        <result column="last_login_time" property="lastLoginTime" />
+    </resultMap>
+
+    <sql id="allColumn">id, is_delete, create_at, update_at, role, state, nickname, sex, avatar, email, password, signature, last_login_time</sql>
+
+    <sql id="tableName">forum_user</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="role != null">
+                and role = #{role}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="nickname != null">
+                and nickname = #{nickname}
+            </if>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.UserDO">
+        INSERT INTO <include refid="tableName"/>
+        (role, state, nickname, sex, avatar, email, password, signature, create_at, last_login_time)
+        VALUES
+        (
+        #{role},
+        #{state},
+        #{nickname},
+        #{sex},
+        #{avatar},
+        #{email},
+        #{password},
+        #{signature},
+        #{createAt},
+        #{lastLoginTime}
+        )
+    </insert>
+
+    <select id="get" resultMap="resultMap">
+        select <include refid="allColumn"/>
+        from <include refid="tableName"/>
+        where id = #{id}
+    </select>
+
+    <select id="getByEmail" resultMap="resultMap">
+        select <include refid="allColumn"/>
+        from <include refid="tableName"/>
+        where email = #{email}
+    </select>
+
+    <update id="update" parameterType="pub.developers.forum.infrastructure.dal.dataobject.UserDO">
+        update <include refid="tableName"/>
+        <set>
+            <if test ='null != role'>role = #{role},</if>
+            <if test ='null != state'>state = #{state},</if>
+            <if test ='null != nickname'>nickname = #{nickname},</if>
+            <if test ='null != sex'>sex = #{sex},</if>
+            <if test ='null != avatar'>avatar = #{avatar},</if>
+            <if test ='null != email'>email = #{email},</if>
+            <if test ='null != password'>password = #{password},</if>
+            <if test ='null != signature'>signature = #{signature},</if>
+            <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryInIds" resultMap="resultMap">
+        select <include refid="allColumn"/>
+        from <include refid="tableName"/>
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="queryOrderLastLoginTime" resultMap="resultMap">
+        select <include refid="allColumn"/>
+        from <include refid="tableName"/>
+        order by last_login_time desc
+    </select>
+
+    <select id="query" resultMap="resultMap">
+        select <include refid="allColumn"/>
+        from <include refid="tableName"/>
+        <include refid="where_clause_do"/>
+        ORDER BY create_at DESC
+    </select>
+
+</mapper>

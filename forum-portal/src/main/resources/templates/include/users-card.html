@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="users_card(title, moreHref, usersList)" class="card">
+    <div class="card-header" style="background-color: white;">
+        <span th:text="${title}">粉丝</span>
+        <a th:href="${moreHref}" href="#" class="text-decoration-none custom-font-color" style="float: right;font-size: 14px;">更多</a>
+    </div>
+    <div class="card-body" style="padding-bottom: 8px;">
+        <div th:if="${#lists.isEmpty(usersList)}"
+             th:include="include/custom-empty :: custom_empty('')"
+             class="row"></div>
+        <div th:if="${!#lists.isEmpty(usersList)}" class="row">
+            <div th:each="user : ${usersList}" class="col-3" style="padding: 0;text-align: center;margin-bottom: 15px;">
+                <img th:src="${user.headImg}"
+                     th:alt="${user.name}"
+                     src="#" style="width: 50px;height: 50px;border-radius: 10px;"/><br/>
+                <a th:text="${user.name}" th:href="${'/user/' + user.id}" target="_blank" class="text-truncate" style="font-size: 13px;">阿崔</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

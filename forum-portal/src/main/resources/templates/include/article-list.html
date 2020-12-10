@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="article_list(articleList, showCategory ,pager)">
+    <!-- 文章列表 -->
+    <div class="list-group">
+        <div th:if="${#lists.isEmpty(articleList)}"
+             th:include="include/custom-empty :: custom_empty('')"
+             class="list-group-item list-group-item-action"></div>
+        <div th:if="${!#lists.isEmpty(articleList)}" th:each="article : ${articleList}" class="list-group-item list-group-item-action">
+            <!-- 文章 -->
+            <div th:if="${article.category == 'ARTICLE'}" class="d-flex justify-content-start">
+                <div th:style="${'' + (#strings.isEmpty(article.headImg) ? 'width: 100%;' : 'width: 80%; padding-right: 10px;')}">
+                    <div class="d-flex align-content-start">
+                        <small th:if="${article.official}" class="posts-admin-tag posts-admin-tag-official">官</small>
+                        <small th:if="${article.top}" class="posts-admin-tag posts-admin-tag-top">顶</small>
+                        <small th:if="${article.marrow}" class="posts-admin-tag posts-admin-tag-marrow">精</small>
+                        <a th:text="${showCategory ? article.categoryDesc + ' | ' + article.title : article.title}"
+                           th:href="${'/article/' + article.id}"
+                           target="_blank"
+                           class="text-truncate posts-list-title">又到一年一度双十一，你的购物车加满了吗？来对比一下李佳琦和薇娅直播间双十一清单，看哪些产品值得买</a>
+                    </div>
+                    <p th:text="${article.desc}" class="mb-1 posts-list-desc">
+                        本书讲述的故事涵盖350多年的历史：人类经济活动的主体从使用铁犁的农民变成了使用电脑的白领；人类对外层空间的观察工具，从伽利略手工制造的两英寸望远镜变成了半径10米的成对凯克天文望远镜，观察视野也从尚不能
+                    </p>
+                </div>
+                <div th:if="${!#strings.isEmpty(article.headImg)}" class="d-flex justify-content-center align-self-center" style="width: 20%;">
+                    <img th:src="${article.headImg}" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg" class="img-fluid" style="max-height: 89px;"/>
+                </div>
+            </div>
+            <!-- 问答 -->
+            <div th:if="${article.category == 'FAQ'}">
+                <div>
+                    <a th:text="${showCategory ? article.categoryDesc + ' | ' + article.title : article.title}"
+                       th:href="${'/faq/' + article.id}"
+                       target="_blank"
+                       class="posts-list-title">又到一年一度双十一，你的购物车加满了吗？来对比一下李佳琦和薇娅直播间双十一清单，看哪些产品值得买</a>
+                </div>
+                <div th:if="${article.isSolution}" class="faq-solution-box">
+                    <p style="margin-top: 0;margin-bottom: 5px;">最佳答案：</p>
+                    <p th:text="${article.solution}" style="margin: 0;">人类对外层空间的观察工具，从伽利略手工制造的两英寸望远镜变成了半径10米的成对凯克天文望远镜，观察视野也从尚不能</p>
+                </div>
+            </div>
+
+            <div class="posts-list-payload-box">
+                <small class="text-muted" style="margin-right: 10px;">
+                    <a th:href="${'/user/' + article.authorId}" target="_blank" href="#">
+                        <img th:src="${article.authorHeadImg}" src="https://www.gravatar.com/avatar/6455e40915d4eac16ed07145a63ab474?d=retro" style="width: 16px;height: 16px;" />&nbsp;
+                        <span th:text="${article.authorName}">qbian</span>
+                    </a>
+                </small>
+                <small class="text-muted posts-list-payload-item">
+                    <i data-feather="clock" style="width: 14px;height: 14px;"></i>&nbsp;
+                    <span th:text="${article.createdAt}">3天前</span>
+                </small>
+                <small class="text-muted posts-list-payload-item">
+                    <i data-feather="eye" style="width: 14px;height: 14px;"></i>&nbsp;
+                    <span th:text="${article.views}">2020</span>
+                </small>
+                <small class="text-muted posts-list-payload-item">
+                    <i th:data-feather="${article.category == 'FAQ' ? 'heart' : 'thumbs-up'}" style="width: 14px;height: 14px;"></i>&nbsp;
+                    <span th:text="${article.approvals}">10</span>
+                </small>
+                <small class="text-muted posts-list-payload-item">
+                    <i data-feather="message-circle" style="width: 14px;height: 14px;"></i>&nbsp;
+                    <span th:text="${article.comments}">2020</span>
+                </small>
+                <small class="text-muted posts-list-payload-item">
+                    <i data-feather="tag" style="width: 14px;height: 14px;"></i>
+                    <a th:each="tag : ${article.tagList}"
+                       th:href="${'/tag/' + tag.name}"
+                       th:text="${tag.name}"
+                       style="margin-left: 10px;" target="_blank" href="#">Java</a>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="include/page :: page(${pager})"></div>
+</div>
+
+</html>

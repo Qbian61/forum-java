@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.UserFollowDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.UserFollowDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="followed" property="followed"/>
+        <result column="followed_type" property="followedType"/>
+        <result column="follower" property="follower"/>
+    </resultMap>
+
+    <sql id="all_column">id ,is_delete ,create_at ,update_at ,followed ,followed_type, follower</sql>
+
+    <sql id="insert_column">followed ,followed_type, follower, create_at</sql>
+
+    <sql id="table">forum_user_follow</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="followed != null">
+                and followed = #{followed}
+            </if>
+            <if test="followedType != null">
+                and followed_type = #{followedType}
+            </if>
+            <if test="follower != null">
+                and follower = #{follower}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" parameterType="pub.developers.forum.infrastructure.dal.dataobject.UserFollowDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="table"/>
+        ( <include refid="insert_column"/> )
+        VALUES
+        (
+        #{followed},
+        #{followedType},
+        #{follower},
+        #{createAt}
+        )
+    </insert>
+
+    <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.UserFollowDO" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table"/>
+        <include refid="where_clause_do"/>
+        ORDER by create_at DESC
+    </select>
+
+    <delete id="delete">
+        delete from <include refid="table"/>
+        where id = #{id}
+    </delete>
+
+    <select id="getAllFollowerIds" resultType="long">
+        select followed
+        from <include refid="table"/>
+        where follower = #{follower}
+        and type = #{type}
+    </select>
+
+</mapper>

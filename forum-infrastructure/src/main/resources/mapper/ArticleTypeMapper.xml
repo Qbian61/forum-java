@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.ArticleTypeDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.ArticleTypeDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="audit_state" property="auditState"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="ref_count" property="refCount"/>
+        <result column="scope" property="scope"/>
+        <result column="creator_id" property="creatorId"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        audit_state, name, description, ref_count, scope, creator_id
+    </sql>
+
+    <sql id="table_name">forum_article_type</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="isDelete != null">
+                and is_delete #{isDelete}
+            </if>
+            <if test="auditState != null">
+                and audit_state = #{auditState}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="description != null">
+                and description = #{description}
+            </if>
+            <if test="refCount != null">
+                and ref_count = #{refCount}
+            </if>
+            <if test="scope != null">
+                and scope = #{scope}
+            </if>
+            <if test="creatorId != null">
+                and creator_id = #{creatorId}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.ArticleTypeDO">
+        INSERT INTO <include refid="table_name"/>
+        ( audit_state, name, description, ref_count, scope, creator_id, create_at)
+        VALUES
+        (
+        #{auditState},
+        #{name},
+        #{description},
+        #{refCount},
+        #{scope},
+        #{creatorId},
+        #{createAt}
+        )
+    </insert>
+
+    <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.ArticleTypeDO" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY create_at DESC
+    </select>
+
+    <select id="queryInScopesAndState" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where audit_state = #{auditState}
+        and scope IN
+        <foreach collection="scopes" item="scope" open="(" separator="," close=")">
+            #{scope}
+        </foreach>
+        ORDER BY create_at DESC
+    </select>
+
+    <update id="update" parameterType="pub.developers.forum.infrastructure.dal.dataobject.ArticleTypeDO">
+        update <include refid="table_name"/>
+        <set>
+            <if test ='null != isDelete'>is_delete = #{isDelete},</if>
+            <if test ='null != auditState'>audit_state = #{auditState},</if>
+            <if test ='null != name'>name = #{name},</if>
+            <if test ='null != description'>description = #{description},</if>
+            <if test ='null != refCount'>ref_count = #{refCount},</if>
+            <if test ='null != scope'>scope = #{scope},</if>
+            <if test ='null != creatorId'>creator_id = #{creatorId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="get" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where id = #{id}
+    </select>
+
+    <update id="increaseRefCount">
+        update <include refid="table_name"/>
+        set ref_count = ref_count + 1
+        where id = #{id}
+    </update>
+
+    <update id="decreaseRefCount">
+        update <include refid="table_name"/>
+        set ref_count = ref_count - 1
+        where id = #{id}
+    </update>
+
+</mapper>

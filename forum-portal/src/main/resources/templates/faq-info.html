@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{::link}, ~{})">
+    <title th:text="${posts.title}">开发者客栈</title>
+    <link href="/css/posts6.css" rel="stylesheet">
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_both(~{::left}, ~{::right})">
+    <left>
+        <div th:replace="include/posts-info :: posts_info(${posts}, '/faq')"></div>
+
+        <div th:replace="include/comment-list :: comment_list(${posts}, ${comments}, 'faq', ${pager})"></div>
+    </left>
+    <right>
+        <div class="posts-author-box" style="text-align: center;">
+            <div class="d-flex justify-content-center align-self-center">
+                <img th:alt="${posts.authorName}"
+                     th:src="${posts.authorAvatar}"
+                     style="width: 80px;height: 80px;border: 1px solid #ddd;border-radius: 50%;"
+                     class="img-fluid" alt="...">
+            </div>
+            <div class="text-center"
+                 style="height: 50px;font-size: 18px;font-weight: 500;line-height: 1.5;padding-top: 10px;">
+                <a th:href="${'/user/' + posts.authorId}" th:text="${posts.authorName}">阿崔</a>
+            </div>
+            <button id="followBtn"
+                    th:data-target="${isLogin ? '' : '#loginModal'}"
+                    th:data-toggle="${isLogin ? '' : 'modal'}"
+                    th:data-has-follow="${hasFollow}"
+                    th:data-followed="${posts.authorId}"
+                    th:text="${hasFollow ? '取消关注' : '关注 TA'}"
+                    th:class="${'btn ' + (hasFollow ? 'btn-secondary' : 'btn-primary')}">关注 TA</button>
+        </div>
+
+        <!-- 作者其他文章 -->
+        <div th:replace="include/posts-card :: posts_card('作者其他文章', ${'/user/' + posts.authorId + '?type=问答'}, '/faq/', ${authorFaqList})"></div>
+    </right>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+<script src="/js/posts4.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function (event) {
+    if (document.querySelectorAll('pre code').length === 0) {
+        return;
+    }
+
+    // 加载 highlight 样式文件
+    loadLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css');
+
+    // 加载 highlight 脚本文件
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js', function () {
+        document.querySelectorAll('pre code').forEach(function (block) {
+            hljs.highlightBlock(block);
+        });
+    });
+});
+</script>
+</body>
+</html>

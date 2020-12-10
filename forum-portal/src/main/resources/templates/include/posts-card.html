@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="posts_card(title, moreHref, itemHrefPrefix, postsList)">
+    <div th:if="${!#lists.isEmpty(postsList)}" class="card">
+        <div class="card-header" style="background-color: white;">
+            <span th:text="${title}">公告</span>
+            <a th:href="${moreHref}" target="_blank" href="#" class="text-decoration-none custom-font-color" style="float: right;font-size: 14px;">更多</a>
+        </div>
+        <div class="card-body">
+            <div th:each="posts : ${postsList}" class="row" style="padding-bottom: 7px;">
+                <div class="col-9 text-truncate">
+                    <a th:text="${posts.title}"
+                       th:title="${posts.title}"
+                       th:href="${itemHrefPrefix + posts.id}"
+                       target="_blank"
+                       href="#" style="font-size: 14px;">对于较长的内容，你可以通过添加 .text-truncate 类将文本截断并添加省略号</a>
+                </div>
+                <div class="col-3 text-truncate" style="padding: 0">
+                    <p th:text="${#dates.format(posts.createdAt, 'yyyy-MM-dd')}"
+                       class="font-weight-light"
+                       style="font-size: 12px;padding-top: 7px;margin-bottom: 0;color: #777777;">2020-10-01</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

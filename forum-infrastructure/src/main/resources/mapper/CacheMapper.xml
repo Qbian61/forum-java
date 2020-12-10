@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.CacheDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.CacheDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="key" property="key"/>
+        <result column="value" property="value"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <sql id="allColumn">id ,is_delete ,create_at ,update_at ,key ,value, type</sql>
+
+    <sql id="tableName">forum_cache</sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO <include refid="tableName"/> (
+        is_delete,
+        create_at,
+        update_at,
+        `key`,
+        `value`,
+        `type`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.isDelete},
+            #{item.createAt},
+            #{item.updateAt},
+            #{item.key},
+            #{item.value},
+            #{item.type}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="pub.developers.forum.infrastructure.dal.dataobject.CacheDO">
+        INSERT INTO <include refid="tableName"/> (
+        is_delete,
+        create_at,
+        update_at,
+        `key`,
+        `value`,
+        `type`
+        )
+        VALUES (
+        #{isDelete},
+        #{createAt},
+        #{updateAt},
+        #{key},
+        #{value},
+        #{type}
+        )
+    </insert>
+
+    <select id="getAll" resultMap="resultMap">
+        SELECT `key`, `value`, `type` FROM <include refid="tableName"/>
+    </select>
+
+    <delete id="batchDeleteByKeys">
+        DELETE FROM <include refid="tableName"/>
+        WHERE `key` IN
+        <foreach collection="keys" item="k" open="(" separator="," close=")">
+            #{k}
+        </foreach>
+    </delete>
+
+    <update id="updateByKey">
+        update <include refid="tableName"/>
+        set `value` = #{value}
+        where `key` = #{key}
+    </update>
+
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title th:text="${'问答 - ' + globalConfig.websiteName}">问答 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_both(~{::left}, ~{::right})">
+    <left>
+        <!-- 类别筛选 -->
+        <div th:replace="include/type-btns :: type_btns(${typeList})"></div>
+
+        <!-- 帖子列表 -->
+        <div th:replace="include/article-list :: article_list(${faqList}, false, ${pager})"></div>
+    </left>
+    <right>
+        <!-- 操作按钮 -->
+        <div class="card">
+            <div class="card-body" style="display: flex;justify-content: space-around;">
+                <small style="padding-top: 10px;color: #888888;">有任何问题可以点击提问</small>
+                <a th:data-target="${isLogin ? '' : '#loginModal'}"
+                   th:data-toggle="${isLogin ? '' : 'modal'}"
+                   th:href="${'/faq/editor'}"
+                   target="_blank"
+                   class="btn btn-primary">提问题</a>
+            </div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div th:replace="include/posts-card :: posts_card('常见问题', '#', '/faq/', ${hotFaqList})"></div>
+    </right>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+</body>
+</html>

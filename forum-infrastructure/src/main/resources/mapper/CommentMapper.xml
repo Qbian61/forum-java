@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.CommentDAO">
+
+    <resultMap id="BaseResultMap" type="pub.developers.forum.infrastructure.dal.dataobject.CommentDO">
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="reply_id" property="replyId" jdbcType="BIGINT" />
+        <result column="reply_reply_id" property="replyReplyId" jdbcType="BIGINT" />
+        <result column="posts_id" property="postsId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table">forum_comment</sql>
+
+    <sql id="Where_Clause" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="data.id != null" >
+                AND id = #{data.id,jdbcType=INTEGER}
+            </if>
+            <if test="data.isDelete != null" >
+                AND is_delete = #{data.isDelete,jdbcType=TINYINT}
+            </if>
+            <if test="data.createAt != null" >
+                AND create_at = #{data.createAt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="data.updateAt != null" >
+                AND update_at = #{data.updateAt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="data.userId != null" >
+                AND user_id = #{data.userId,jdbcType=BIGINT}
+            </if>
+            <if test="data.replyId != null" >
+                AND reply_id = #{data.replyId,jdbcType=BIGINT}
+            </if>
+            <if test="data.replyReplyId != null" >
+                AND reply_reply_id = #{data.replyReplyId,jdbcType=BIGINT}
+            </if>
+            <if test="data.articleId != null" >
+                AND article_id = #{data.articleId,jdbcType=BIGINT}
+            </if>
+            <if test="data.content != null" >
+                AND content = #{data.content,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="Where_Clause_DO" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="id != null" >
+                AND id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="isDelete != null" >
+                AND is_delete = #{isDelete,jdbcType=TINYINT}
+            </if>
+            <if test="createAt != null" >
+                AND create_at = #{createAt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateAt != null" >
+                AND update_at = #{updateAt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="userId != null" >
+                AND user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="replyId != null" >
+                AND reply_id = #{replyId,jdbcType=BIGINT}
+            </if>
+            <if test="replyReplyId != null" >
+                AND reply_reply_id = #{replyReplyId,jdbcType=BIGINT}
+            </if>
+            <if test="postsId != null" >
+                AND posts_id = #{postsId,jdbcType=BIGINT}
+            </if>
+            <if test="content != null" >
+                AND content = #{content,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id,
+        is_delete ,
+        create_at ,
+        update_at ,
+        user_id ,
+        reply_id ,
+        reply_reply_id ,
+        posts_id ,
+        content
+    </sql>
+
+    <select id="findByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="table"/>
+        WHERE  id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByIds" parameterType="java.util.Set" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="table"/>
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="pub.developers.forum.infrastructure.dal.dataobject.CommentDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="table"/>
+        (
+        user_id,
+        reply_id,
+        reply_reply_id,
+        posts_id,
+        content,
+        create_at
+        )
+        VALUES
+        (
+        #{userId},
+        #{replyId},
+        #{replyReplyId},
+        #{postsId},
+        #{content},
+        #{createAt}
+        )
+    </insert>
+
+    <update id="update" parameterType="pub.developers.forum.infrastructure.dal.dataobject.CommentDO">
+        UPDATE  <include refid="table"/>
+        <set>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="replyId != null">
+                reply_id = #{replyId,jdbcType=BIGINT},
+            </if>
+            <if test="replyReplyId != null">
+                reply_reply_id = #{replyReplyId,jdbcType=BIGINT},
+            </if>
+            <if test="postsId != null">
+                posts_id = #{postsId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryByPostsId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="table"/>
+        WHERE posts_id = #{postsId}
+        and is_delete = 0
+        and reply_id is null
+        and reply_reply_id is null
+        order by create_at desc
+    </select>
+
+    <select id="queryInReplyIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="table"/>
+        WHERE reply_id IN
+        <foreach collection="commentIds" item="replyId" open="(" separator="," close=")">
+            #{replyId}
+        </foreach>
+        and is_delete = 0
+        order by create_at asc
+    </select>
+
+    <delete id="deleteByPostsId">
+        UPDATE <include refid="table"/>
+        SET is_delete = 1
+        WHERE posts_id = #{postsId,jdbcType=BIGINT}
+    </delete>
+
+    <select id="queryInIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="table"/>
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and is_delete = 0
+    </select>
+</mapper>

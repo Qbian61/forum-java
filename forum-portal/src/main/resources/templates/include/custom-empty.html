@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="custom_empty(msg)" class="row">
+    <p class="custom-empty" th:text="${#strings.isEmpty(msg) ? '空空如也 ~ ~' : msg}">空空如也 ~ ~</p>
+</div>
+
+</html>

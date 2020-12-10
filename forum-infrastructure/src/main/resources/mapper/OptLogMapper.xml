@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.OptLogDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.OptLogDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="type" property="type"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        type, operator_id, content
+    </sql>
+
+    <sql id="table_name">forum_opt_log</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="operatorId != null">
+                and operator_id = #{operatorId}
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.OptLogDO">
+        INSERT INTO <include refid="table_name"/>
+        ( type, operator_id, content, create_at, update_at )
+        VALUES
+        (
+        #{type},
+        #{operatorId},
+        #{content},
+        #{createAt},
+        #{updateAt}
+        )
+    </insert>
+
+    <select id="query" resultMap="resultMap" parameterType="pub.developers.forum.infrastructure.dal.dataobject.OptLogDO">
+        select <include refid="all_column"/>
+        from <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY create_at DESC
+    </select>
+
+</mapper>

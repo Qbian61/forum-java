@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
+    <title th:text="${'关注 - ' + globalConfig.websiteName}">关注 - 开发者客栈</title>
+</div>
+<body>
+<div th:replace="include/navbar :: header"></div>
+
+<div th:replace="include/container :: container_both(~{::left}, ~{::right})">
+    <left>
+        <!-- 帖子列表 -->
+        <div th:replace="include/article-list :: article_list(${postsList}, true, ${pager})"></div>
+    </left>
+    <right>
+        <!-- 操作按钮 -->
+        <div class="card">
+            <div class="card-body" style="display: flex;justify-content: space-around;">
+                <a th:data-target="${isLogin ? '' : '#loginModal'}"
+                   th:data-toggle="${isLogin ? '' : 'modal'}"
+                   th:href="${'/article/editor'}"
+                   target="_blank"
+                   class="btn btn-primary">写文章</a>
+                <a th:data-target="${isLogin ? '' : '#loginModal'}"
+                   th:data-toggle="${isLogin ? '' : 'modal'}"
+                   th:href="${'/faq/editor'}"
+                   target="_blank"
+                   class="btn btn-outline-primary">提问题</a>
+            </div>
+        </div>
+
+        <!-- 活跃用户 -->
+        <div th:replace="include/users-card :: users_card('最近活跃用户', 'javascript:;', ${activeUsers})"></div>
+    </right>
+</div>
+
+<div th:replace="include/footer :: footer"></div>
+</body>
+</html>

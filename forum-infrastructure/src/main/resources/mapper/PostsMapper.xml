@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.PostsDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.PostsDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="audit_state" property="auditState"/>
+        <result column="category" property="category"/>
+        <result column="author_id" property="authorId"/>
+        <result column="title" property="title"/>
+        <result column="content_type" property="contentType"/>
+        <result column="markdown_content" property="markdownContent"/>
+        <result column="html_content" property="htmlContent"/>
+        <result column="views" property="views"/>
+        <result column="approvals" property="approvals"/>
+        <result column="comments" property="comments"/>
+        <result column="type_id" property="typeId"/>
+        <result column="head_img" property="headImg"/>
+        <result column="official" property="official"/>
+        <result column="top" property="top"/>
+        <result column="sort" property="sort"/>
+        <result column="marrow" property="marrow"/>
+        <result column="comment_id" property="commentId"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        audit_state, category, author_id, title, content_type, markdown_content,html_content,
+        views, approvals, comments, type_id, head_img, official, top, sort, marrow, comment_id
+    </sql>
+
+    <sql id="table_name">forum_posts</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="auditState != null">
+                and audit_state = #{auditState}
+            </if>
+            <if test="category != null">
+                and category = #{category}
+            </if>
+            <if test="authorId != null">
+                and author_id = #{authorId}
+            </if>
+            <if test="title != null">
+                and title = #{title}
+            </if>
+            <if test="contentType != null">
+                and content_type = #{contentType}
+            </if>
+            <if test="markdownContent != null">
+                and markdown_content = #{markdownContent}
+            </if>
+            <if test="htmlContent != null">
+                and html_content = #{htmlContent}
+            </if>
+            <if test="views != null">
+                and views = #{views}
+            </if>
+            <if test="approvals != null">
+                and approvals = #{approvals}
+            </if>
+            <if test="comments != null">
+                and comments = #{comments}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="headImg != null">
+                and head_img = #{headImg}
+            </if>
+            <if test="official != null">
+                and official = #{official}
+            </if>
+            <if test="top != null">
+                and top = #{top}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="marrow != null">
+                and marrow = #{marrow}
+            </if>
+            <if test="commentId != null">
+                and comment_id = #{commentId}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="where_clause_value" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="auditStates != null">
+                and audit_state IN
+                <foreach collection="auditStates" item="auditState" open="(" separator="," close=")">
+                    #{auditState}
+                </foreach>
+            </if>
+            <if test="category != null">
+                and category = #{category}
+            </if>
+            <if test="authorId != null">
+                and author_id = #{authorId}
+            </if>
+            <if test="title != null">
+                and title = #{title}
+            </if>
+            <if test="markdownContent != null">
+                and markdown_content = #{markdownContent}
+            </if>
+            <if test="official != null">
+                and official = #{official}
+            </if>
+            <if test="top != null">
+                and top = #{top}
+            </if>
+            <if test="marrow != null">
+                and marrow = #{marrow}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="commentId == 1">
+                and comment_id = 0
+            </if>
+            <if test="commentId == 2">
+                and comment_id != 0
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.PostsDO">
+        INSERT INTO <include refid="table_name"/>
+        ( audit_state, category, author_id, title, content_type, markdown_content, html_content,
+        views, approvals, comments, type_id, head_img, official, top, sort, marrow, comment_id, create_at )
+        VALUES
+        (
+        #{auditState},
+        #{category},
+        #{authorId},
+        #{title},
+        #{contentType},
+        #{markdownContent},
+        #{htmlContent},
+        #{views},
+        #{approvals},
+        #{comments},
+        #{typeId},
+        #{headImg},
+        #{official},
+        #{top},
+        #{sort},
+        #{marrow},
+        #{commentId},
+        #{createAt}
+        )
+    </insert>
+
+    <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.PostsDO" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY sort ASC, create_at DESC
+    </select>
+
+    <select id="queryByValue" parameterType="pub.developers.forum.domain.entity.value.PostsPageQueryValue" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_value"/>
+        ORDER BY sort ASC, create_at DESC
+    </select>
+
+    <update id="update" parameterType="pub.developers.forum.infrastructure.dal.dataobject.PostsDO">
+        update <include refid="table_name"/>
+        <set>
+            <if test ='null != isDelete'>is_delete = #{isDelete},</if>
+            <if test ='null != auditState'>audit_state = #{auditState},</if>
+            <if test ='null != category'>category = #{category},</if>
+            <if test ='null != title'>title = #{title},</if>
+            <if test ='null != contentType'>content_type = #{contentType},</if>
+            <if test ='null != markdownContent'>markdown_content = #{markdownContent},</if>
+            <if test ='null != htmlContent'>html_content = #{htmlContent},</if>
+            <if test ='null != views'>views = #{views},</if>
+            <if test ='null != approvals'>approvals = #{approvals},</if>
+            <if test ='null != comments'>comments = #{comments},</if>
+            <if test ='null != typeId'>type_id = #{typeId},</if>
+            <if test ='null != headImg'>head_img = #{headImg},</if>
+            <if test ='null != official'>official = #{official},</if>
+            <if test ='null != top'>top = #{top},</if>
+            <if test ='null != sort'>sort = #{sort},</if>
+            <if test ='null != marrow'>marrow = #{marrow},</if>
+            <if test ='null != commentId'>comment_id = #{commentId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="get" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where id = #{id}
+    </select>
+
+    <update id="increaseComments">
+        update <include refid="table_name"/>
+        set comments = comments + 1
+        where id = #{id}
+    </update>
+
+    <update id="decreaseComments">
+        update <include refid="table_name"/>
+        set comments = comments - 1
+        where id = #{id}
+    </update>
+
+    <update id="increaseViews">
+        update <include refid="table_name"/>
+        set views = views + 1
+        where id = #{id}
+    </update>
+
+    <select id="queryOrderViews" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from <include refid="table_name"/>
+        where audit_state = #{auditState}
+        and category = #{category}
+        order by views desc
+    </select>
+
+    <select id="queryInIds" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from <include refid="table_name"/>
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <delete id="delete">
+        delete from <include refid="table_name"/>
+        where id = #{id}
+    </delete>
+
+    <update id="increaseApproval">
+        update <include refid="table_name"/>
+        set approvals = approvals + 1
+        where id = #{id}
+    </update>
+
+    <update id="decreaseApproval">
+        update <include refid="table_name"/>
+        set approvals = approvals - 1
+        where id = #{id}
+    </update>
+
+    <select id="getAllIdByAuthorId" resultType="long">
+        select id
+        from <include refid="table_name"/>
+        where author_id = #{authorId}
+        and audit_state = #{auditState}
+    </select>
+
+</mapper>

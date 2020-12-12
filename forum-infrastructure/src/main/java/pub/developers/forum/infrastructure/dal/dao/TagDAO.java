@@ -24,4 +24,6 @@ public interface TagDAO {
     void increaseRefCount(@Param("ids") Set<Long> ids);
 
     void decreaseRefCount(@Param("ids") Set<Long> ids);
+
+    TagDO get(Long id);
 }

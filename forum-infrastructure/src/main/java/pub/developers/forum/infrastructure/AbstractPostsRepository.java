@@ -19,6 +19,7 @@ import pub.developers.forum.infrastructure.transfer.UserTransfer;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,8 +43,8 @@ public abstract class AbstractPostsRepository {
     @Resource
     TagDAO tagDAO;
 
-    public PageResult<Posts> basePagePosts(Set<Long> postsIds, PageInfo pageInfo) {
-        List<PostsDO> queryPostsDOS = postsDAO.queryInIds(postsIds);
+    public PageResult<Posts> basePagePosts(List<Long> postsIds, PageInfo pageInfo) {
+        List<PostsDO> queryPostsDOS = postsDAO.queryInIds(new HashSet<>(postsIds));
         if (ObjectUtils.isEmpty(queryPostsDOS)) {
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
@@ -61,7 +62,7 @@ public abstract class AbstractPostsRepository {
         Set<Long> userIds = SafesUtil.ofList(postsDOS).stream().map(PostsDO::getAuthorId).collect(Collectors.toSet());
         List<User> users = UserTransfer.toUsers(userDAO.queryInIds(userIds));
 
-        List<TagPostsMappingDO> tagPostsMappingDOList = tagPostsMappingDAO.queryInPostsIds(postsIds);
+        List<TagPostsMappingDO> tagPostsMappingDOList = tagPostsMappingDAO.queryInPostsIds(new HashSet<>(postsIds));
         if (ObjectUtils.isEmpty(tagPostsMappingDOList)) {
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), PostsTransfer.toPostsList(postsDOS, users, tagPostsMappingDOList, new ArrayList<>()));
         }

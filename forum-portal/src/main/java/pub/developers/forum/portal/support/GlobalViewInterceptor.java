@@ -77,9 +77,6 @@ public class GlobalViewInterceptor extends HandlerInterceptorAdapter {
                 }
                 modelAndView.getModel().put("isLogin", !ObjectUtils.isEmpty(loginUserInfo));
 
-                ResultModel<Long> onlineNumber = userApiService.onlineNumber();
-                modelAndView.getModel().put("onlineUsers", onlineNumber.getSuccess() ? onlineNumber.getData() : 0);
-
                 modelAndView.getModel().put("globalConfig", globalViewConfig);
             }
         } finally {

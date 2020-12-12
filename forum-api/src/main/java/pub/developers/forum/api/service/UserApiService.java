@@ -21,8 +21,6 @@ public interface UserApiService {
 
     ResultModel follow(Long followed);
 
-    ResultModel<Long> onlineNumber();
-
     ResultModel cancelFollow(Long followed);
 
     ResultModel<PageResponseModel<UserPageResponse>> pageFollower(PageRequestModel<Long> pageRequestModel);

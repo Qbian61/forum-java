@@ -110,11 +110,6 @@ public class DbCacheServiceImpl implements CacheService {
         return Boolean.TRUE;
     }
 
-    @Override
-    public Long count(CacheBizTypeEn bizType) {
-        return Long.valueOf((ALL_CACHE.size() / 2) + "");
-    }
-
     // -------------------------------- 缓存更新操作
 
     @PostConstruct

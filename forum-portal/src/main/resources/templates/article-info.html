@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="include/header :: head(~{::title}, ~{::link}, ~{})">
+<div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
     <title th:text="${posts.title}">开发者客栈</title>
-    <link href="/css/posts6.css" rel="stylesheet">
 </div>
 <body>
 <div th:replace="include/navbar :: header"></div>
@@ -40,14 +39,14 @@
 </div>
 
 <div th:replace="include/footer :: footer"></div>
-
-<script src="/js/posts4.js"></script>
+<div th:replace="include/posts-style-script :: posts_style_script"></div>
 <script>
 document.addEventListener('DOMContentLoaded', function (event) {
     if (document.querySelectorAll('pre code').length === 0) {
         return;
     }
 
+    // 为什么不写 script 标签加载下面资源？有的文章内容没有代码块，就不需要加载下面的资源，可以加快页面展示速度
     // 加载 highlight 样式文件
     loadLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css');
 

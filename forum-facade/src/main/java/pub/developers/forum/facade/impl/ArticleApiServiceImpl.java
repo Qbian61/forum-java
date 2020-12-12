@@ -112,4 +112,20 @@ public class ArticleApiServiceImpl implements ArticleApiService {
 
         return ResultModelUtil.success();
     }
+
+    @Override
+    public ResultModel<PageResponseModel<ArticleQueryTypesResponse>> typePage(PageRequestModel<ArticleAdminTypePageRequest> pageRequestModel) {
+        PageRequestModelValidator.validator(pageRequestModel);
+
+        return ResultModelUtil.success(articleManager.typePage(pageRequestModel));
+    }
+
+    @Override
+    public ResultModel typeAuditState(ArticleAdminBooleanRequest booleanRequest) {
+        ArticleValidator.validatorBooleanRequest(booleanRequest);
+
+        articleManager.typeAuditState(booleanRequest);
+
+        return ResultModelUtil.success();
+    }
 }

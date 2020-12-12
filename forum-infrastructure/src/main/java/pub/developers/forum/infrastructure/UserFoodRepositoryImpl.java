@@ -14,6 +14,7 @@ import pub.developers.forum.infrastructure.dal.dataobject.UserFoodDO;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,9 +62,8 @@ public class UserFoodRepositoryImpl extends AbstractPostsRepository implements U
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
 
-        Set<Long> postsIds = userFoodDOS.stream()
-                .map(UserFoodDO::getPostsId)
-                .collect(Collectors.toSet());
+        List<Long> postsIds = new ArrayList<>();
+        userFoodDOS.forEach(userFoodDO -> postsIds.add(userFoodDO.getPostsId()));
 
         return basePagePosts(postsIds, pageInfo);
     }

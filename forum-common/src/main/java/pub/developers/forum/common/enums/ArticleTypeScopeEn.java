@@ -11,6 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ArticleTypeScopeEn {
+    /**
+     *
+     */
     OFFICIAL("OFFICIAL", "官方"),
     USER("USER", "用户"),
     ;

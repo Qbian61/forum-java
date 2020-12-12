@@ -29,12 +29,12 @@
                              style="width: 50px;height: 50px;border-radius: 50%" />
                     </div>
                     <div style="float: right;width: calc(100% - 80px);height: 60px;">
-                        <div style="height: 30px;">
+                        <div style="height: 30px;" class="text-truncate">
                             <a th:text="${msg.senderName}"
                                th:href="${'/user/' + msg.sender}"
                                target="_blank"
-                               class="posts-list-title" style="font-size: 15px;">qbian</a>&nbsp;&nbsp;&nbsp;
-                            <span th:text="${msg.typeDesc}" style="font-size: 12px;">关注</span>&nbsp;&nbsp;&nbsp;
+                               class="posts-list-title message-block" style="font-size: 15px;">qbian</a>
+                            <span th:text="${msg.typeDesc}" style="font-size: 12px;" class="message-block">关注</span>
                             <a th:text="${msg.title}"
                                th:href="${msg.infoAction}"
                                target="_blank"

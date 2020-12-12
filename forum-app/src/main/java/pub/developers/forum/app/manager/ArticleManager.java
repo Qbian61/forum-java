@@ -6,14 +6,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
+import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.request.article.*;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
 import pub.developers.forum.api.response.article.ArticleUserPageResponse;
 import pub.developers.forum.app.support.IsLogin;
 import pub.developers.forum.app.support.LoginUserContext;
+import pub.developers.forum.app.support.PageUtil;
 import pub.developers.forum.app.support.Pair;
 import pub.developers.forum.app.transfer.ArticleTransfer;
+import pub.developers.forum.app.transfer.OptLogTransfer;
 import pub.developers.forum.common.enums.*;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.common.support.CheckUtil;
@@ -83,6 +86,7 @@ public class ArticleManager extends AbstractPostsManager {
 
         Article oldArticle = article.copy();
         Article newArticle = ArticleTransfer.toArticle(request, articleType, selectTags, true, INIT_SORT);
+        newArticle.setAuditState(oldArticle.getAuditState());
 
         articleRepository.update(newArticle);
 
@@ -98,11 +102,29 @@ public class ArticleManager extends AbstractPostsManager {
         return ArticleTransfer.toArticleQueryTypesResponses(articleTypes);
     }
 
-
+    @IsLogin(role = UserRoleEn.ADMIN)
     public List<ArticleQueryTypesResponse> queryAdminTypes() {
         List<ArticleType> articleTypes = articleTypeRepository.queryByState(null);
 
         return ArticleTransfer.toArticleQueryTypesResponses(articleTypes);
+    }
+
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public PageResponseModel<ArticleQueryTypesResponse> typePage(PageRequestModel<ArticleAdminTypePageRequest> pageRequestModel) {
+        ArticleAdminTypePageRequest typePageRequest = pageRequestModel.getFilter();
+        ArticleType articleType = ArticleType.builder()
+                .name(typePageRequest.getName())
+                .description(typePageRequest.getDescription())
+                .build();
+        if (!ObjectUtils.isEmpty(typePageRequest.getAuditState())) {
+            articleType.setAuditState(AuditStateEn.getEntity(typePageRequest.getAuditState()));
+        }
+        if (!ObjectUtils.isEmpty(typePageRequest.getScope())) {
+            articleType.setScope(ArticleTypeScopeEn.getEntity(typePageRequest.getScope()));
+        }
+        PageResult<ArticleType> pageResult = articleTypeRepository.page(PageUtil.buildPageRequest(pageRequestModel, articleType));
+
+        return PageResponseModel.build(pageResult.getTotal(), pageResult.getSize(), ArticleTransfer.toArticleQueryTypesResponses(pageResult.getList()));
     }
 
     @IsLogin
@@ -122,6 +144,10 @@ public class ArticleManager extends AbstractPostsManager {
 
     @IsLogin(role = UserRoleEn.ADMIN)
     public void addType(ArticleAddTypeRequest request) {
+        CheckUtil.isNotEmpty(articleTypeRepository.query(ArticleType.builder()
+                .name(request.getName())
+                .build()), ErrorCodeEn.ARTICLE_TYPE_IS_EXIST);
+
         articleTypeRepository.save(ArticleTransfer.toArticleType(request));
     }
 
@@ -174,7 +200,7 @@ public class ArticleManager extends AbstractPostsManager {
                 .marrow(request.getMarrow())
                 .top(request.getTop())
                 .build();
-        if (!ObjectUtils.isEmpty(request.getAuditState()) && ObjectUtils.isEmpty(AuditStateEn.getEntity(request.getAuditState()))) {
+        if (!ObjectUtils.isEmpty(request.getAuditState()) && !ObjectUtils.isEmpty(AuditStateEn.getEntity(request.getAuditState()))) {
             List<String> auditStates = new ArrayList<>();
             auditStates.add(AuditStateEn.getEntity(request.getAuditState()).getValue());
             pageQueryValue.setAuditStates(auditStates);
@@ -211,6 +237,15 @@ public class ArticleManager extends AbstractPostsManager {
         postsRepository.update(basePosts);
     }
 
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public void typeAuditState(ArticleAdminBooleanRequest booleanRequest) {
+        ArticleType articleType = articleTypeRepository.get(booleanRequest.getId());
+        CheckUtil.isEmpty(articleType, ErrorCodeEn.ARTICLE_TYPE_IS_EXIST);
+
+        articleType.setAuditState(booleanRequest.getIs() ? AuditStateEn.PASS : AuditStateEn.REJECT);
+        articleTypeRepository.update(articleType);
+    }
+
     public ArticleInfoResponse info(Long id) {
         Article article = articleRepository.get(id);
         CheckUtil.isEmpty(article, ErrorCodeEn.ARTICLE_NOT_EXIST);
@@ -242,4 +277,5 @@ public class ArticleManager extends AbstractPostsManager {
 
         return articleType;
     }
+
 }

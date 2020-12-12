@@ -50,11 +50,6 @@ public class UserApiServiceImpl implements UserApiService {
     }
 
     @Override
-    public ResultModel<Long> onlineNumber() {
-        return ResultModelUtil.success(userManager.onlineNumber());
-    }
-
-    @Override
     public ResultModel cancelFollow(Long followed) {
         userManager.cancelFollow(followed);
 

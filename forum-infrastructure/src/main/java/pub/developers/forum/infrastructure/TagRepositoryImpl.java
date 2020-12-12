@@ -50,6 +50,31 @@ public class TagRepositoryImpl extends AbstractPostsRepository implements TagRep
     }
 
     @Override
+    public List<Tag> query(Tag tag) {
+        return TagTransfer.toTags(tagDAO.query(TagTransfer.toTagDO(tag)));
+    }
+
+    @Override
+    public Tag get(Long id) {
+        return TagTransfer.toTag(tagDAO.get(id));
+    }
+
+    @Override
+    public void update(Tag tag) {
+        TagDO tagDO = TagDO.builder()
+                .description(tag.getDescription())
+                .groupName(tag.getGroupName())
+                .name(tag.getName())
+                .auditState(ObjectUtils.isEmpty(tag.getAuditState()) ? null : tag.getAuditState().getValue())
+                .creatorId(tag.getCreatorId())
+                .refCount(tag.getRefCount())
+                .build();
+        tagDO.setId(tag.getId());
+
+        tagDAO.update(tagDO);
+    }
+
+    @Override
     public List<Tag> queryByIds(Set<Long> ids) {
         return TagTransfer.toTags(tagDAO.queryInIds(ids));
     }
@@ -106,10 +131,29 @@ public class TagRepositoryImpl extends AbstractPostsRepository implements TagRep
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
 
-        Set<Long> postsIds = tagPostsMappingDOS.stream()
-                .map(TagPostsMappingDO::getPostsId)
-                .collect(Collectors.toSet());
+        List<Long> postsIds = new ArrayList<>();
+        tagPostsMappingDOS.forEach(tagPostsMappingDO -> postsIds.add(tagPostsMappingDO.getPostsId()));
 
         return basePagePosts(postsIds, pageInfo);
+    }
+
+    @Override
+    public PageResult<Tag> page(PageRequest<Tag> pageRequest) {
+        PageHelper.startPage(pageRequest.getPageNo(), pageRequest.getPageSize());
+
+        Tag tag = pageRequest.getFilter();
+        List<TagDO> tagDOList = tagDAO.query(TagDO.builder()
+                .auditState(ObjectUtils.isEmpty(tag.getAuditState()) ? null : tag.getAuditState().getValue())
+                .name(tag.getName())
+                .groupName(tag.getGroupName())
+                .description(tag.getDescription())
+                .build());
+
+        PageInfo<TagDO> pageInfo = new PageInfo<>(tagDOList);
+        if (ObjectUtils.isEmpty(tagDOList)) {
+            return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
+        }
+
+        return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), TagTransfer.toTags(tagDOList));
     }
 }

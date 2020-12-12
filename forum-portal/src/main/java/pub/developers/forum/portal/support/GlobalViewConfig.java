@@ -28,4 +28,8 @@ public class GlobalViewConfig {
 
     private String websiteFaviconIconUrl;
 
+    private String contactMeWxQrCode;
+
+    private String contactMeTitle;
+
 }

@@ -1,6 +1,7 @@
 package pub.developers.forum.infrastructure;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.domain.entity.BasePosts;
 import pub.developers.forum.domain.repository.PostsRepository;
@@ -76,6 +77,9 @@ public class PostsRepositoryImpl implements PostsRepository {
                 .marrow(basePosts.getMarrow())
                 .official(basePosts.getOfficial())
                 .build();
+        if (!ObjectUtils.isEmpty(basePosts.getAuditState())) {
+            postsDO.setAuditState(basePosts.getAuditState().getValue());
+        }
         postsDO.setId(basePosts.getId());
 
         postsDAO.update(postsDO);

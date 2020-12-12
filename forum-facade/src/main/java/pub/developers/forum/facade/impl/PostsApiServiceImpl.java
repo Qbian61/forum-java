@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.service.PostsApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.app.manager.PostsManager;
 import pub.developers.forum.facade.support.ResultModelUtil;
+import pub.developers.forum.facade.validator.ArticleValidator;
 import pub.developers.forum.facade.validator.PageRequestModelValidator;
 
 import javax.annotation.Resource;
@@ -34,4 +36,14 @@ public class PostsApiServiceImpl implements PostsApiService {
     public ResultModel<PageResponseModel<PostsVO>> pagePostsFood(PageRequestModel pageRequestModel) {
         return ResultModelUtil.success(postsManager.pagePostsFood(pageRequestModel));
     }
+
+    @Override
+    public ResultModel auditState(ArticleAdminBooleanRequest booleanRequest) {
+        ArticleValidator.validatorBooleanRequest(booleanRequest);
+
+        postsManager.auditState(booleanRequest);
+
+        return ResultModelUtil.success();
+    }
+
 }

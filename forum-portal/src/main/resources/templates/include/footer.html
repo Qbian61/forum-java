@@ -4,7 +4,7 @@
 <footer th:fragment="footer">
     <div class="foot custom-bg-color">
         <ul class="foot-link">
-            <li><a class="text-reset" href="javascript:;">在线人数：<span th:text="${onlineUsers}"></span></a></li>
+            <!--<li><a class="text-reset" href="javascript:;">在线人数：<span th:text="${onlineUsers}"></span></a></li>-->
             <!--<li><a class="text-reset" href="https://www.developers.pub/blog" target="_blank">博客文章</a></li>-->
             <li th:text="${globalConfig.websiteStartYear} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ' © ' + ${globalConfig.websiteRecord}">2016-2020 © developers 皖ICP备17014120号</li>
         </ul>
@@ -15,12 +15,273 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/toastr.js/1.3.1/js/toastr.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"></script>
 
     <!-- custom js -->
-    <script src="/js/md5.min.js"></script>
-    <script src="/js/common2.js"></script>
     <script>
         feather.replace();
+
+        // 登录
+        $('#loginBtn').on('click', function () {
+            var email = $('#loginEmail').val();
+            if (!email) {
+                toastr.error('登录邮箱不能为空');
+                return false;
+            }
+
+            var password = $('#loginPassword').val();
+            if (!password) {
+                toastr.error('登录密码不能为空');
+                return false;
+            }
+
+            post('/user-rest/login', {
+                'email': email,
+                'password': md5(password)
+            }, function (data) {
+                localStorage.setItem('token', data);
+                location.reload();
+            });
+        });
+
+        // 注册
+        $('#registerBtn').on('click', function () {
+            var email = $('#registerEmail').val();
+            if (!email) {
+                toastr.error('注册邮箱不能为空');
+                return;
+            }
+            if (email.indexOf('@') < 0) {
+                toastr.error('请输入正确的邮箱格式');
+                return;
+            }
+
+            var nickname = $('#registerNickname').val();
+            if (!nickname) {
+                toastr.error('昵称不能为空');
+                return;
+            }
+            if (nickname.length > 10) {
+                toastr.error('昵称不能超过10个字符');
+                return;
+            }
+
+            var password = $('#registerPassword').val();
+            if (!password) {
+                toastr.error('注册密码不能为空');
+                return;
+            }
+
+            var password2 = $('#registerPassword2').val();
+            if (!password2) {
+                toastr.error('二次确认密码不能为空');
+                return;
+            }
+
+            if (password2 !== password) {
+                toastr.error('二次密码不一致，请重新输入');
+                return;
+            }
+
+            post('/user-rest/register', {
+                'email': email,
+                'nickname': nickname,
+                'password': md5(password)
+            }, function (data) {
+                localStorage.setItem('token', data);
+                location.reload();
+            });
+        });
+
+        // 保存文章
+        $('#updateArticleBtn').on('click', function () {
+            saveArticle(function (data) {
+                toastr.success('保存成功');
+            });
+        });
+
+        $('#saveArticleBtn').on('click', function () {
+            saveArticle(function (data) {
+                toastr.success('发表成功');
+                location.href = '/';
+            });
+        });
+
+        var saveArticle = function(callback) {
+            var type = $('#type').val();
+            if (!type) {
+                toastr.error('类别不能为空');
+                return;
+            }
+
+            var title = $('#title').val();
+            if (!title) {
+                toastr.error('标题不能为空');
+                return;
+            }
+            if (title.length > 40) {
+                toastr.error('标题不能超过40个字符');
+                return;
+            }
+
+            var content = $('#content').val();
+            if (!content) {
+                toastr.error('内容不能为空');
+                return;
+            }
+
+            var tags = $('#tags').val();
+            if (!tags) {
+                toastr.error('标签不能为空');
+                return;
+            }
+
+            post('/article-rest/save', {
+                'id': $('#id').val(),
+                'typeId': type,
+                'title': title,
+                'contentType': 'MARKDOWN',
+                'markdownContent': content,
+                'htmlContent': content,
+                'tagIds': tags.split(','),
+                'headImg': ''
+            }, function (data) {
+                $('#id').val(data);
+                callback(data);
+            });
+        };
+
+        // 提交问答
+        $('#updateFaqBtn').on('click', function () {
+            saveFaq(function (data) {
+                toastr.success('保存成功');
+            });
+        });
+
+        $('#saveFaqBtn').on('click', function () {
+            saveFaq(function (data) {
+                toastr.success('提交成功');
+                location.href = '/faq';
+            });
+        });
+
+        var saveFaq = function (callback) {
+            var title = $('#title').val();
+            if (!title) {
+                toastr.error('标题不能为空');
+                return;
+            }
+            if (title.length > 50) {
+                toastr.error('标题不能超过50个字符');
+                return;
+            }
+
+            var content = $('#content').val();
+            if (!content) {
+                toastr.error('内容不能为空');
+                return;
+            }
+
+            var tags = $('#tags').val();
+            if (!tags) {
+                toastr.error('标签不能为空');
+                return;
+            }
+
+            post('/faq-rest/save', {
+                'id': $('#id').val(),
+                'title': title,
+                'contentType': 'MARKDOWN',
+                'markdownContent': content,
+                'htmlContent': content,
+                'tagIds': tags.split(',')
+            }, function (data) {
+                $('#id').val(data);
+                callback(data);
+            });
+        };
+
+        $('#tagSelectConfirmBtn').on('click', function () {
+            var tagCheckboxs = $('.tag-checkbox');
+            var tagNamesStr = [];
+            var tagIdsStr = [];
+            for (var i = 0; i <  tagCheckboxs.length; i ++) {
+                if (tagCheckboxs[i].checked) {
+                    tagIdsStr.push(tagCheckboxs[i].value);
+                    tagNamesStr.push(tagCheckboxs[i].dataset.name);
+                }
+            }
+            if (tagIdsStr.length > 5) {
+                toastr.error("标签最多可选择 5 个")
+            } else {
+                $('#tags').val(tagIdsStr.join(','));
+                $('#tagInput').val(tagNamesStr.join(','));
+            }
+        });
+
+        var followBtn = $('#followBtn');
+        if (followBtn) {
+            followBtn.on('click', function () {
+                var thiz = this;
+                if(this.dataset.hasFollow === 'false') {
+                    post('/user-rest/follow/' + this.dataset.followed, {}, function (data) {
+                        thiz.dataset.hasFollow = 'true';
+                        followBtn.attr('class', followBtn.attr('class').replaceAll('btn-primary', 'btn-secondary'));
+                        followBtn.html('取消关注');
+                        toastr.success("关注成功");
+                    })
+                } else {
+                    post('/user-rest/cancel-follow/' + this.dataset.followed, {}, function (data) {
+                        thiz.dataset.hasFollow = 'false';
+                        followBtn.attr('class', followBtn.attr('class').replaceAll('btn-secondary', 'btn-primary'));
+                        followBtn.html('关注 TA');
+                        toastr.success("取消关注成功");
+                    })
+                }
+            });
+        }
+
+
+        var post = function (path, data, callback) {
+            $.ajax({
+                method: 'POST',
+                url: path,
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (!data.success) {
+                        toastr.error(data.message);
+                    } else if (callback) {
+                        callback(data.data);
+                    }
+                }
+            });
+        };
+
+        var loadScript = function (url, callback) {
+            var secScript = document.createElement("script");
+            if (secScript.readyState) { // IE
+                secScript.onreadystatechange = function () {
+                    if (secScript.readyState === 'loaded' || secScript.readyState === 'complete') {
+                        secScript.onreadystatechange = null;
+                        callback();
+                    }
+                }
+            } else { // 其他浏览器
+                secScript.onload = function () {
+                    callback();
+                }
+            }
+            secScript.setAttribute("type", "text/javascript");
+            secScript.setAttribute("src", url);
+            document.body.insertBefore(secScript, document.body.lastChild);
+        };
+
+        var loadLink = function (url) {
+            var headHTML = document.getElementsByTagName('head')[0].innerHTML;
+            headHTML += '<link href="' + url + '" rel="stylesheet">';
+            document.getElementsByTagName('head')[0].innerHTML = headHTML;
+        };
     </script>
 </footer>
 

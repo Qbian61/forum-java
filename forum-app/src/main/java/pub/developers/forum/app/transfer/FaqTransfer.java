@@ -69,6 +69,8 @@ public class FaqTransfer {
             }
             return FaqUserPageResponse.builder()
                     .category(PostsCategoryEn.FAQ.getValue())
+                    .auditState(faq.getAuditState().getDesc())
+                    .updateAt(faq.getUpdateAt())
                     .categoryDesc(PostsCategoryEn.FAQ.getDesc())
                     .authorAvatar(faq.getAuthor().getAvatar())
                     .authorId(faq.getAuthor().getId())
@@ -87,6 +89,7 @@ public class FaqTransfer {
                     .views(faq.getViews())
                     .approvals(faq.getApprovals())
                     .solution(solution)
+                    .solutionDesc(solution == null ? "未解决" : "已解决")
                     .build();
         }).collect(Collectors.toList());
     }

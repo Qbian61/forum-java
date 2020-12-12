@@ -46,9 +46,8 @@ public class DbSearchServiceImpl extends AbstractPostsRepository implements Sear
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
 
-        Set<Long> postsIds = searchDOS.stream()
-                .map(SearchDO::getEntityId)
-                .collect(Collectors.toSet());
+        List<Long> postsIds = new ArrayList<>();
+        searchDOS.forEach(searchDO -> postsIds.add(searchDO.getEntityId()));
 
         return basePagePosts(postsIds, pageInfo);
     }

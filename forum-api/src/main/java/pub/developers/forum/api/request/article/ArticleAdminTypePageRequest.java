@@ -1,4 +1,4 @@
-package pub.developers.forum.api.response.article;
+package pub.developers.forum.api.request.article;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,24 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author Qiangqiang.Bian
- * @create 2020/10/31
+ * @create 2020/12/12
  * @desc
  **/
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleQueryTypesResponse implements Serializable {
+public class ArticleAdminTypePageRequest implements Serializable {
 
-    private Long id;
-
+    /**
+     * 名称
+     */
     private String name;
-
-    private Long refCount;
 
     /**
      * 描述
@@ -36,24 +34,7 @@ public class ArticleQueryTypesResponse implements Serializable {
     private String scope;
 
     /**
-     * 创建人
-     */
-    private Long creatorId;
-
-    /**
      * 审核状态
      */
     private String auditState;
-
-    /**
-     * 创建时间
-     */
-    private String createAt;
-
-    /**
-     * 更新时间
-     */
-    private String updateAt;
-
-
 }

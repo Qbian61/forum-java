@@ -18,6 +18,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TagCreateRequest implements Serializable {
 
+    private String groupName;
+
     /**
      * 名称
      */

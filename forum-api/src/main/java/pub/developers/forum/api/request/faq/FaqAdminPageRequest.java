@@ -20,4 +20,10 @@ public class FaqAdminPageRequest implements Serializable {
 
     private String title;
 
+    private String auditState;
+
+    private Long userId;
+
+    private Long commentId;
+
 }

@@ -13,6 +13,7 @@ public class TagValidator {
     public static void create(TagCreateRequest request) {
         CheckUtil.checkParamToast(request, "request");
         CheckUtil.checkParamToast(request.getName(), "name");
+        CheckUtil.checkParamToast(request.getGroupName(), "groupName");
         CheckUtil.checkParamToast(request.getDescription(), "description");
     }
 

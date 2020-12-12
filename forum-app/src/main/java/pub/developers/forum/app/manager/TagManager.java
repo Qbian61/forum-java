@@ -1,9 +1,13 @@
 package pub.developers.forum.app.manager;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
+import pub.developers.forum.api.request.tag.TagPageRequest;
+import pub.developers.forum.api.response.tag.TagPageResponse;
 import pub.developers.forum.api.response.tag.TagQueryResponse;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.app.support.IsLogin;
@@ -37,6 +41,8 @@ public class TagManager extends AbstractPostsManager {
 
     @IsLogin(role = UserRoleEn.ADMIN)
     public void create(TagCreateRequest request) {
+        CheckUtil.isNotEmpty(tagRepository.query(Tag.builder().name(request.getName()).build()), ErrorCodeEn.TAG_IS_EXIST);
+
         tagRepository.save(TagTransfer.toTag(request));
     }
 
@@ -63,5 +69,31 @@ public class TagManager extends AbstractPostsManager {
         PageResult<Posts> pageResult = tagRepository.pagePosts(PageUtil.buildPageRequest(pageRequestModel, pageRequestModel.getFilter()));
 
         return pagePostsVO(pageResult);
+    }
+
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public PageResponseModel<TagPageResponse> page(PageRequestModel<TagPageRequest> pageRequestModel) {
+        TagPageRequest tagPageRequest = pageRequestModel.getFilter();
+        Tag tag = Tag.builder()
+                .groupName(tagPageRequest.getGroupName())
+                .name(tagPageRequest.getName())
+                .description(tagPageRequest.getDescription())
+                .build();
+        if (!ObjectUtils.isEmpty(tagPageRequest.getAuditState())) {
+            tag.setAuditState(AuditStateEn.getEntity(tagPageRequest.getAuditState()));
+        }
+
+        PageResult<Tag> pageResult = tagRepository.page(PageUtil.buildPageRequest(pageRequestModel, tag));
+
+        return PageResponseModel.build(pageResult.getTotal(), pageResult.getSize(), TagTransfer.toTagPageResponses(pageResult.getList()));
+    }
+
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public void tagAuditState(ArticleAdminBooleanRequest booleanRequest) {
+        Tag tag = tagRepository.get(booleanRequest.getId());
+        CheckUtil.isEmpty(tag, ErrorCodeEn.TAG_NOT_EXIST);
+
+        tag.setAuditState(booleanRequest.getIs() ? AuditStateEn.PASS : AuditStateEn.REJECT);
+        tagRepository.update(tag);
     }
 }

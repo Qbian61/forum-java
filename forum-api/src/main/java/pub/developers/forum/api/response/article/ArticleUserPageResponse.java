@@ -23,6 +23,8 @@ public class ArticleUserPageResponse implements Serializable {
 
     private Long id;
 
+    private String auditState;
+
     private String category;
 
     private String categoryDesc;

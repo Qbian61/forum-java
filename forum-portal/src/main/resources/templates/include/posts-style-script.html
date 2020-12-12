@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 分页 -->
+<div th:fragment="posts_style_script">
+    <style>
+        .article-content img {
+            max-width: 100%;
+            max-height: 500px;
+            box-sizing: content-box;
+            background-color: #fff;
+            margin: 0 auto;
+        }
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4,
+        .article-content h5 {
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 7px;
+        }
+        .article-content h1 {
+            border-bottom: 1px solid #eaecef;
+            font-size: 1.7em;
+        }
+        .article-content h2 {
+            font-size: 1.5em;
+        }
+        .article-content h3 {
+            font-size: 1.3em;
+        }
+        .article-content h4 {
+            font-size: 1.1em;
+        }
+        .article-content h5 {
+            font-size: 1em;
+        }
+        .article-content p,
+        .article-content ol,
+        .article-content ul,
+        .article-content table,
+        .article-content pre,
+        .article-content blockquote {
+            /* font-weight: 400; */
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .article-content blockquote {
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: .25em solid #dfe2e5;
+        }
+        .article-content ol,
+        .article-content ul {
+            padding-left: 20px;
+        }
+        .article-content table {
+            display: table;
+            border-collapse: separate;
+            border-spacing: 2px;
+            border-color: grey;
+            border-spacing: 0;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .article-content table th,
+        .article-content table tr,
+        .article-content table td {
+            padding: 6px 13px;
+            border: 1px solid #dfe2e5;
+        }
+        .article-content pre {
+            padding: 5px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #fafafa;
+            border-radius: 3px;
+            word-wrap: normal;
+        }
+        .article-content pre div {
+            background-color: #fafafa;
+        }
+        .article-content li {
+            /* font-weight: 400; */
+            line-height: 1.4;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        .article-content .hljs-center {
+            text-align: center;
+        }
+        .article-content .hljs-left {
+            text-align: left;
+        }
+        .article-content .hljs-right {
+            text-align: right;
+        }
+    </style>
+    <script>
+        var commentInput = $('#postsCommentInput');
+        commentInput.focus(function () {
+            if ($('#bodyNav')[0].dataset.islogin === 'false') {
+                return;
+            }
+            commentInput.css('height', '70px');
+            $('#postsCommentBtnBox').css('display','block');
+        });
+        commentInput.blur(function () {
+            if (commentInput.val().length === 0) {
+                commentInput.css('height', '35px');
+                $('#postsCommentBtnBox').css('display','none');
+            }
+        });
+
+        $('#postsCommentBtn').on('click', function () {
+            if (!commentInput.val()) {
+                toastr.error('评论内容不能为空');
+                return;
+            }
+            comment(commentInput.val(), '');
+        });
+
+        var replyContent = $('#replyContent');
+        var replyBtn = $('#replyBtn');
+        $('.reply-comment').on('click', function (e) {
+            $('#commentModalDropLabel').html('回复 ' + this.dataset.replyNickname);
+            $('#repliedContent').html(this.dataset.replyContent);
+            replyContent.attr('placeholder', '回复' + this.dataset.replyNickname);
+            replyBtn.attr('data-reply-id', this.dataset.replyId);
+        });
+
+        replyBtn.on('click', function () {
+            if (!replyContent.val()) {
+                toastr.error('回复内容不能为空');
+                return;
+            }
+            comment(replyContent.val(), replyBtn.attr('data-reply-id'));
+        });
+
+        $('.best-answer').on('click', function (e) {
+            post('/faq-rest/solution', {
+                faqId: $('#postsTitle')[0].dataset.id,
+                commentId: this.dataset.commentId
+            }, function (data) {
+                toastr.success('提交成功');
+            })
+        });
+
+        var comment = function (content, replyId) {
+            post('/comment-rest/create', {
+                postsId: $('#postsTitle')[0].dataset.id,
+                content: content,
+                replyId: replyId
+            }, function (data) {
+                location.reload()
+            })
+        };
+
+        $('#deleteBtn').on('click', function () {
+            post('/posts-rest/delete/' + $('#postsTitle')[0].dataset.id, {}, function (data) {
+                toastr.success("删除成功");
+                location.href = '/';
+            })
+        });
+
+        var postsApprovalBtn = $('#postsApprovalBtn');
+        postsApprovalBtn.on('click', function () {
+            if (this.dataset.toggle) {
+                return;
+            }
+            if (postsApprovalBtn.attr('class') === 'custom-font-color') {
+                post('/approval-rest/delete/' + $('#postsTitle')[0].dataset.id, {}, function (data) {
+                    toastr.success('取消'+ postsApprovalBtn.attr('title') +'成功');
+                    postsApprovalBtn.attr('class', '');
+                    $('#postsApprovalNumber').html(data);
+                });
+            } else {
+                post('/approval-rest/create/' + $('#postsTitle')[0].dataset.id, {}, function (data) {
+                    toastr.success(postsApprovalBtn.attr('title') + "成功");
+                    postsApprovalBtn.attr('class', 'custom-font-color');
+                    $('#postsApprovalNumber').html(data);
+                });
+            }
+        });
+    </script>
+</div>
+
+</html>

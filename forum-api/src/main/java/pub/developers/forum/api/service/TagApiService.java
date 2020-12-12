@@ -3,7 +3,10 @@ package pub.developers.forum.api.service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
+import pub.developers.forum.api.request.tag.TagPageRequest;
+import pub.developers.forum.api.response.tag.TagPageResponse;
 import pub.developers.forum.api.response.tag.TagQueryResponse;
 import pub.developers.forum.api.vo.PostsVO;
 
@@ -27,4 +30,7 @@ public interface TagApiService {
 
     ResultModel<PageResponseModel<PostsVO>> pagePosts(PageRequestModel<Long> pageRequestModel);
 
+    ResultModel<PageResponseModel<TagPageResponse>> page(PageRequestModel<TagPageRequest> pageRequestModel);
+
+    ResultModel auditState(ArticleAdminBooleanRequest booleanRequest);
 }

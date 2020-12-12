@@ -26,6 +26,8 @@ public class FaqUserPageResponse implements Serializable {
 
     private String category;
 
+    private String auditState;
+
     private String categoryDesc;
 
     private String title;
@@ -40,6 +42,8 @@ public class FaqUserPageResponse implements Serializable {
 
     private Date createAt;
 
+    private Date updateAt;
+
     private Long views;
 
     private Long approvals;
@@ -49,5 +53,7 @@ public class FaqUserPageResponse implements Serializable {
     private List<TagVO> tags;
 
     private SolutionVO solution;
+
+    private String solutionDesc;
 
 }

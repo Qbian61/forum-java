@@ -57,10 +57,6 @@ public class UserManager {
      */
     private static final Long USER_LOGIN_TOKEN_EXPIRE_TIMEOUT = 60 * 60 * 24 * 7L;
 
-    public Long onlineNumber() {
-        return cacheService.count(CacheBizTypeEn.USER_LOGIN_TOKEN);
-    }
-
     @IsLogin(role = UserRoleEn.ADMIN)
     public PageResponseModel<UserOptLogPageResponse> pageOptLog(PageRequestModel<UserOptLogPageRequest> pageRequestModel) {
         PageResult<OptLog> pageResult = optLogRepository.page(PageUtil.buildPageRequest(pageRequestModel, OptLogTransfer.toOptLog(pageRequestModel.getFilter())));

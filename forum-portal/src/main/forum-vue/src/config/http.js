@@ -4,8 +4,10 @@ import iView from 'iview'
 
 // axios默认配置
 axios.defaults.timeout = 100000 // 超时时间
-axios.defaults.baseURL = 'http://localhost:8080' // 默认地址
-// axios.defaults.baseURL = 'https://www.developers.pub'
+axios.defaults.baseURL = '' // 默认为当前访问地址，部署到服务器时使用该地址
+if (location.href.includes('127.0.0.1') || location.href.includes('localhost')) {
+  axios.defaults.baseURL = 'http://localhost:8080' // 本地 forum-java 应用服务地址
+}
 
 // 整理数据
 // axios.defaults.transformRequest = function (data) {

@@ -4,13 +4,17 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
+import pub.developers.forum.api.request.tag.TagPageRequest;
+import pub.developers.forum.api.response.tag.TagPageResponse;
 import pub.developers.forum.api.response.tag.TagQueryResponse;
 import pub.developers.forum.api.service.TagApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.app.manager.TagManager;
 import pub.developers.forum.common.support.CheckUtil;
 import pub.developers.forum.facade.support.ResultModelUtil;
+import pub.developers.forum.facade.validator.ArticleValidator;
 import pub.developers.forum.facade.validator.PageRequestModelValidator;
 import pub.developers.forum.facade.validator.TagValidator;
 
@@ -60,5 +64,21 @@ public class TagApiServiceImpl implements TagApiService {
         PageRequestModelValidator.validator(pageRequestModel);
 
         return ResultModelUtil.success(tagManager.pagePosts(pageRequestModel));
+    }
+
+    @Override
+    public ResultModel<PageResponseModel<TagPageResponse>> page(PageRequestModel<TagPageRequest> pageRequestModel) {
+        PageRequestModelValidator.validator(pageRequestModel);
+
+        return ResultModelUtil.success(tagManager.page(pageRequestModel));
+    }
+
+    @Override
+    public ResultModel auditState(ArticleAdminBooleanRequest booleanRequest) {
+        ArticleValidator.validatorBooleanRequest(booleanRequest);
+
+        tagManager.tagAuditState(booleanRequest);
+
+        return ResultModelUtil.success();
     }
 }

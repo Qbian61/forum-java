@@ -11,6 +11,7 @@ import pub.developers.forum.common.enums.ArticleTypeScopeEn;
 import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.common.enums.ContentTypeEn;
 import pub.developers.forum.common.enums.PostsCategoryEn;
+import pub.developers.forum.common.support.DateUtil;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.domain.entity.Article;
 import pub.developers.forum.domain.entity.ArticleType;
@@ -55,6 +56,7 @@ public class ArticleTransfer {
     public static List<ArticleUserPageResponse> toArticleUserPageResponses(List<Article> articles) {
         return SafesUtil.ofList(articles).stream().map(article -> {
             return ArticleUserPageResponse.builder()
+                    .auditState(article.getAuditState().getDesc())
                     .category(PostsCategoryEn.ARTICLE.getValue())
                     .categoryDesc(PostsCategoryEn.ARTICLE.getDesc())
                     .authorAvatar(article.getAuthor().getAvatar())
@@ -139,6 +141,12 @@ public class ArticleTransfer {
                 .id(articleType.getId())
                 .name(articleType.getName())
                 .refCount(articleType.getRefCount())
+                .description(articleType.getDescription())
+                .scope(articleType.getScope().getDesc())
+                .auditState(articleType.getAuditState().getDesc())
+                .createAt(DateUtil.toyyyyMMddHHmmss(articleType.getCreateAt()))
+                .updateAt(DateUtil.toyyyyMMddHHmmss(articleType.getUpdateAt()))
+                .creatorId(articleType.getCreatorId())
                 .build();
     }
 }

@@ -47,6 +47,4 @@ public interface CacheService {
      */
     Boolean del(CacheBizTypeEn bizType, String key);
 
-    Long count(CacheBizTypeEn bizType);
-
 }

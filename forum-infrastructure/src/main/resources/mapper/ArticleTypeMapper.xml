@@ -25,17 +25,15 @@
 
     <sql id="where_clause_do" >
         <trim prefix="where" prefixOverrides="and|or" >
-            <if test="isDelete != null">
-                and is_delete #{isDelete}
-            </if>
+            is_delete = 0
             <if test="auditState != null">
                 and audit_state = #{auditState}
             </if>
             <if test="name != null">
-                and name = #{name}
+                and name like concat('%', #{name}, '%')
             </if>
             <if test="description != null">
-                and description = #{description}
+                and description like concat('%', #{description}, '%')
             </if>
             <if test="refCount != null">
                 and ref_count = #{refCount}

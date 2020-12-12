@@ -5,10 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
-import pub.developers.forum.api.request.faq.FaqAuthorPageRequest;
-import pub.developers.forum.api.request.faq.FaqSaveFaqRequest;
-import pub.developers.forum.api.request.faq.FaqSolutionRequest;
-import pub.developers.forum.api.request.faq.FaqUserPageRequest;
+import pub.developers.forum.api.request.faq.*;
 import pub.developers.forum.api.response.faq.FaqHotsResponse;
 import pub.developers.forum.api.response.faq.FaqInfoResponse;
 import pub.developers.forum.api.response.faq.FaqUserPageResponse;
@@ -19,6 +16,7 @@ import pub.developers.forum.app.transfer.FaqTransfer;
 import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.common.enums.ErrorCodeEn;
 import pub.developers.forum.common.enums.PostsCategoryEn;
+import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.common.support.CheckUtil;
 import pub.developers.forum.common.support.EventBus;
@@ -127,6 +125,25 @@ public class FaqManager extends AbstractPostsManager {
                 .auditStates(auditStates)
                 .authorId(request.getUserId())
                 .build();
+
+        return pageQuery(pageRequestModel, pageQueryValue);
+    }
+
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public PageResponseModel<FaqUserPageResponse> adminPage(PageRequestModel<FaqAdminPageRequest> pageRequestModel) {
+        FaqAdminPageRequest adminPageRequest = pageRequestModel.getFilter();
+        PostsPageQueryValue pageQueryValue = PostsPageQueryValue.builder()
+                .category(PostsCategoryEn.FAQ.getValue())
+                .authorId(adminPageRequest.getUserId())
+                .title(adminPageRequest.getTitle())
+                .commentId(adminPageRequest.getCommentId())
+                .build();
+
+        if (!ObjectUtils.isEmpty(adminPageRequest.getAuditState()) && !ObjectUtils.isEmpty(AuditStateEn.getEntity(adminPageRequest.getAuditState()))) {
+            List<String> auditStates = new ArrayList<>();
+            auditStates.add(AuditStateEn.getEntity(adminPageRequest.getAuditState()).getValue());
+            pageQueryValue.setAuditStates(auditStates);
+        }
 
         return pageQuery(pageRequestModel, pageQueryValue);
     }

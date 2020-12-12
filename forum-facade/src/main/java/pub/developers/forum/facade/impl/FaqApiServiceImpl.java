@@ -10,6 +10,8 @@ import pub.developers.forum.api.response.faq.FaqInfoResponse;
 import pub.developers.forum.api.response.faq.FaqUserPageResponse;
 import pub.developers.forum.api.service.FaqApiService;
 import pub.developers.forum.app.manager.FaqManager;
+import pub.developers.forum.app.support.IsLogin;
+import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.facade.support.ResultModelUtil;
 import pub.developers.forum.facade.validator.FaqValidator;
 import pub.developers.forum.facade.validator.PageRequestModelValidator;
@@ -35,9 +37,12 @@ public class FaqApiServiceImpl implements FaqApiService {
         return ResultModelUtil.success(faqManager.saveFaq(request));
     }
 
+    @IsLogin(role = UserRoleEn.ADMIN)
     @Override
     public ResultModel<PageResponseModel<FaqUserPageResponse>> adminPage(PageRequestModel<FaqAdminPageRequest> pageRequestModel) {
-        return null;
+        PageRequestModelValidator.validator(pageRequestModel);
+
+        return ResultModelUtil.success(faqManager.adminPage(pageRequestModel));
     }
 
     @Override

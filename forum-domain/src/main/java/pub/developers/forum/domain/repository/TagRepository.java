@@ -18,6 +18,8 @@ public interface TagRepository {
 
     void save(Tag tag);
 
+    List<Tag> query(Tag tag);
+
     List<Tag> queryByIds(Set<Long> ids);
 
     List<Tag> queryByState(AuditStateEn auditState);
@@ -31,4 +33,10 @@ public interface TagRepository {
     Tag getByNameAndState(String name, AuditStateEn pass);
 
     PageResult<Posts> pagePosts(PageRequest<Long> longPageRequest);
+
+    PageResult<Tag> page(PageRequest<Tag> tagPageRequest);
+
+    Tag get(Long id);
+
+    void update(Tag tag);
 }

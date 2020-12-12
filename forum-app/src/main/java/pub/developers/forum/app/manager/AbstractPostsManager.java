@@ -3,12 +3,14 @@ package pub.developers.forum.app.manager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageResponseModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.app.support.IsLogin;
 import pub.developers.forum.app.support.LoginUserContext;
 import pub.developers.forum.app.transfer.PostsTransfer;
 import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.common.enums.ErrorCodeEn;
+import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.common.support.CheckUtil;
 import pub.developers.forum.common.support.EventBus;
@@ -82,5 +84,14 @@ public abstract class AbstractPostsManager {
         commentRepository.deleteByPostsId(id);
         postsRepository.delete(id);
         EventBus.emit(EventBus.Topic.POSTS_DELETE, basePosts);
+    }
+
+    @IsLogin(role = UserRoleEn.ADMIN)
+    public void auditState(ArticleAdminBooleanRequest booleanRequest) {
+        BasePosts basePosts = postsRepository.get(booleanRequest.getId());
+        CheckUtil.isEmpty(basePosts, ErrorCodeEn.ARTICLE_NOT_EXIST);
+
+        basePosts.setAuditState(booleanRequest.getIs() ? AuditStateEn.PASS : AuditStateEn.REJECT);
+        postsRepository.update(basePosts);
     }
 }

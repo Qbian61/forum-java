@@ -18,12 +18,12 @@ public class ArticleTypeTransfer {
 
     public static ArticleTypeDO toArticleTypeDO(ArticleType articleType) {
         ArticleTypeDO articleTypeDO = ArticleTypeDO.builder()
-                .auditState(articleType.getAuditState().getValue())
+                .auditState(ObjectUtils.isEmpty(articleType.getAuditState()) ? null : articleType.getAuditState().getValue())
                 .creatorId(articleType.getCreatorId())
                 .description(articleType.getDescription())
                 .name(articleType.getName())
                 .refCount(articleType.getRefCount())
-                .scope(articleType.getScope().getValue())
+                .scope(ObjectUtils.isEmpty(articleType.getScope()) ? null : articleType.getScope().getValue())
                 .build();
 
         articleTypeDO.initBase();
@@ -53,6 +53,7 @@ public class ArticleTypeTransfer {
                 .build();
         articleType.setId(articleTypeDO.getId());
         articleType.setCreatorId(articleTypeDO.getCreatorId());
+        articleType.setCreateAt(articleTypeDO.getCreateAt());
         articleType.setUpdateAt(articleTypeDO.getUpdateAt());
 
         return articleType;

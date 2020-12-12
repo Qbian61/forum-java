@@ -24,7 +24,9 @@
                         本书讲述的故事涵盖350多年的历史：人类经济活动的主体从使用铁犁的农民变成了使用电脑的白领；人类对外层空间的观察工具，从伽利略手工制造的两英寸望远镜变成了半径10米的成对凯克天文望远镜，观察视野也从尚不能
                     </p>
                 </div>
-                <div th:if="${!#strings.isEmpty(article.headImg)}" class="d-flex justify-content-center align-self-center" style="width: 20%;">
+                <div th:if="${!#strings.isEmpty(article.headImg)}"
+                     class="d-flex justify-content-center align-self-center"
+                     style="width: 20%;">
                     <img th:src="${article.headImg}" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg" class="img-fluid" style="max-height: 89px;"/>
                 </div>
             </div>
@@ -46,7 +48,7 @@
                 <small class="text-muted" style="margin-right: 10px;">
                     <a th:href="${'/user/' + article.authorId}" target="_blank" href="#">
                         <img th:src="${article.authorHeadImg}" src="https://www.gravatar.com/avatar/6455e40915d4eac16ed07145a63ab474?d=retro" style="width: 16px;height: 16px;" />&nbsp;
-                        <span th:text="${article.authorName}">qbian</span>
+                        <span th:text="${article.authorName}" class="posts-list-payload-box-author">qbian</span>
                     </a>
                 </small>
                 <small class="text-muted posts-list-payload-item">
@@ -70,7 +72,7 @@
                     <a th:each="tag : ${article.tagList}"
                        th:href="${'/tag/' + tag.name}"
                        th:text="${tag.name}"
-                       style="margin-left: 10px;" target="_blank" href="#">Java</a>
+                       style="margin-left: 5px;" target="_blank" href="#">Java</a>
                 </small>
             </div>
         </div>

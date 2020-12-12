@@ -40,4 +40,8 @@ public interface ArticleApiService {
     ResultModel adminOfficial(ArticleAdminBooleanRequest booleanRequest);
 
     ResultModel adminMarrow(ArticleAdminBooleanRequest booleanRequest);
+
+    ResultModel<PageResponseModel<ArticleQueryTypesResponse>> typePage(PageRequestModel<ArticleAdminTypePageRequest> pageRequestModel);
+
+    ResultModel typeAuditState(ArticleAdminBooleanRequest booleanRequest);
 }

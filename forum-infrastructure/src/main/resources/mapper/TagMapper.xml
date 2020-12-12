@@ -30,13 +30,13 @@
                 and audit_state = #{auditState}
             </if>
             <if test="groupName != null">
-                and group_name = #{groupName}
+                and group_name like concat('%', #{groupName}, '%')
             </if>
             <if test="name != null">
                 and name = #{name}
             </if>
             <if test="description != null">
-                and description = #{description}
+                and description like concat('%', #{description}, '%')
             </if>
             <if test="refCount != null">
                 and ref_count = #{refCount}
@@ -109,5 +109,11 @@
             #{id}
         </foreach>
     </update>
+
+    <select id="get" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where id = #{id}
+    </select>
 
 </mapper>

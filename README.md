@@ -1,5 +1,6 @@
 # forum-java
-spring boot框架开发的社区：https://www.developers.pub
+
+spring boot框架开发的 [社区](https://www.developers.pub)：https://www.developers.pub
 
 # 简介
 

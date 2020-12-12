@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.user.UserAdminPageRequest;
 import pub.developers.forum.api.request.user.UserOptLogPageRequest;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
@@ -57,4 +58,11 @@ public class AdminRestUserController {
         return userApiService.pageOptLog(pageRequestModel);
     }
 
+    @PostMapping("/update-role")
+    public ResultModel updateRole(@RequestBody ArticleAdminBooleanRequest booleanRequest
+            , HttpServletRequest request) {
+        request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
+
+        return userApiService.updateRole(booleanRequest);
+    }
 }

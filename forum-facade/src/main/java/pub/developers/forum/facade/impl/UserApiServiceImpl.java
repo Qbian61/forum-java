@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.user.*;
 import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
@@ -12,6 +13,7 @@ import pub.developers.forum.api.response.user.UserPageResponse;
 import pub.developers.forum.api.service.UserApiService;
 import pub.developers.forum.app.manager.UserManager;
 import pub.developers.forum.facade.support.ResultModelUtil;
+import pub.developers.forum.facade.validator.ArticleValidator;
 import pub.developers.forum.facade.validator.PageRequestModelValidator;
 import pub.developers.forum.facade.validator.UserValidator;
 
@@ -150,5 +152,14 @@ public class UserApiServiceImpl implements UserApiService {
         pageRequestModel.setFilter(request);
 
         return ResultModelUtil.success(userManager.pageOptLog(pageRequestModel));
+    }
+
+    @Override
+    public ResultModel updateRole(ArticleAdminBooleanRequest booleanRequest) {
+        ArticleValidator.validatorBooleanRequest(booleanRequest);
+
+        userManager.updateRole(booleanRequest);
+
+        return ResultModelUtil.success();
     }
 }

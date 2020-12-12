@@ -86,7 +86,6 @@ public class ArticleManager extends AbstractPostsManager {
 
         Article oldArticle = article.copy();
         Article newArticle = ArticleTransfer.toArticle(request, articleType, selectTags, true, INIT_SORT);
-        newArticle.setAuditState(oldArticle.getAuditState());
 
         articleRepository.update(newArticle);
 

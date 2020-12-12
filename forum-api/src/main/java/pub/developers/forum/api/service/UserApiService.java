@@ -3,6 +3,7 @@ package pub.developers.forum.api.service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
 import pub.developers.forum.api.request.user.*;
 import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
@@ -48,4 +49,6 @@ public interface UserApiService {
     ResultModel<PageResponseModel<UserPageResponse>> pageActive(PageRequestModel pageRequestModel);
 
     ResultModel<PageResponseModel<UserOptLogPageResponse>> pageOptLog(PageRequestModel<UserOptLogPageRequest> pageRequestModel);
+
+    ResultModel updateRole(ArticleAdminBooleanRequest booleanRequest);
 }

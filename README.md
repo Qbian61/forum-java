@@ -1,38 +1,129 @@
 # forum-java
 spring boot框架开发的社区：https://www.developers.pub
 
-# 一 功能列表
+# 简介
+
+[forum-java](https://www.developers.pub/) 是一个开源的现代化社区平台，它实现了：
+
+- 面向内容讨论的论坛；
+- 面向知识问答的社区；
+- 100% 开源；
 
 
-![开发者客栈.png](https://static.developers.pub/8a71564c56c74416bb81ce87f3f2e719?)
+欢迎到 [开发者客栈](https://www.developers.pub/) 官方讨论区了解更多。同时也欢迎关注 开发者客栈 开源社区微信公众号 智猿其说：
+
+![开发者客栈.png](./img/qrcode_for_wx_public_account.jpg)
 
 
-# 二 特性
+# 为什么要做这个项目？
 
-## 2.1 前端
+- PHP语言较多，Java的很少，目前spring boot开源的更是几乎没有，无法很好的接入公司内部系统；
+- 很多社区功能过于简单，无法满足大部分需求；
+- 界面风格老式，没有跟上时代发展的审美；
+- 缺乏实际运营需求的功能，管理功能过于简单；
+
+
+# 功能列表
+
+```$xslt
+
+用户端
+    文章分类
+        筛选文章
+    标签
+        查看详情
+        筛选文章/问答
+    文章
+        写文章
+        编辑
+        删除
+        评论
+        点赞
+        查看详情
+    问答
+        提问题
+        编辑
+        删除
+        查看详情
+        评论
+        关注
+        设置评论为最佳答案
+        筛选已解决问题
+        筛选未解决问题
+    用户
+        查看详情
+        编辑个人资料
+        更新登录密码
+        关注好友
+        查看粉丝
+    消息
+        文章/问答被关注通知
+        文章/问答被评论通知
+        个人被关注通知
+        设置消息为已读
+    关注
+        关注的用户文章/问答
+        关注的问答
+        评论的问答
+        点赞的文章
+        评论的文章
+    搜索
+        根据文章/问答标题/内容模糊搜索
+        
+管理端
+    用户管理
+        禁用/启用
+        设置为管理员/取消管理员
+    操作日志
+        操作类别筛选
+    文章管理
+        设置为官方
+        设置为置顶
+        设置为加精
+        审核通过（可见）
+        审核不过（不可见）
+    文章类别管理
+        审核通过（可见）
+        审核不过（不可见）
+        新增分类
+    问答管理
+        审核通过（可见）
+        审核不过（不可见）
+    标签管理
+        审核通过（可见）
+        审核不过（不可见）
+        新增标签
+```
+
+![开发者客栈.png](./img/功能列表)
+
+
+#  特性
+
+##  前端
 
 - 多终端适配（手机端，pc端）
 - 自定义主题颜色，方便企业用户自定义主题
 - 编辑器支持control + s保存
 - 编辑器支持control + v复制图片上传
 
-## 2.2 后端
+##  后端
 
 - 日志带有调用链，方便排查问题
 - 分布式session，支持集群部署
 - 用户角色权限分级，便于用户管理
 - 接口权限校验，接口操作更安全
 
-## 2.3 管理
+## 可扩展功能接口
 
 - 文章/问答更新时自带审核，可接入审核中心便于运营管理
 - 文件存储抽象接口，可支持自定义接入企业内部文件储存服务
 - 缓存服务抽象接口，可支持自定义接入企业内部缓存服务
 - 搜索服务抽象接口，可支持自定义接入企业内部搜索服务
 
-# 三 技术栈
+# 技术栈
 
-## 3.1 后端
+## 后端
 
 - 数据库：mysql
 - 持久层框架：mybatis
@@ -45,82 +136,97 @@ spring boot框架开发的社区：https://www.developers.pub
 - 七牛云存储sdk：qiniu java sdk
 - 服务端页面渲染：thymeleaf
 
-## 3.2 前端
+## 前端
 
 - 前端markdown编辑器：mavon-editor
 - 管理后台js框架：vue
 - 用户端UI框架：bootstrap
 - 管理后台UI框架 iview
 
-# 四 用户页面展示
+# 部分页面展示
+
+## 用户页面展示
 
 - 首页
 
 
-![首页]( https://static.developers.pub/81c6695a0e374ea89eb4037ff248259c)
+![首页](./img/pc首页)
 
 
-![image.png](https://static.developers.pub/5092d67341a14cc6b155d21727a79227)
+![image.png](./img/手机首页)
 
 
 - 问答页
 
 
-![问答页]( https://static.developers.pub/bfe0760841cd444a88942b9131355d30)
+![问答页](./img/pc问答页)
 
 
-![image.png](https://static.developers.pub/ee20c1508a234b229613d681dc3cd913)
+![image.png](./img/手机问答页)
 
 
 - 关注页
 
 
-![image.png](https://static.developers.pub/cf523137fa964bb0a60691b7b37a2594)
+![image.png](./img/pc关注页)
 
 
 - 消息列表页
 
-![image.png](https://static.developers.pub/ff047bbafb6d43b2b497ee7188d5b6c2)
+![image.png](./img/pc消息列表页)
 
 
 - 文章详情页
 
-![文章详情页]( https://static.developers.pub/e537e76e4ad34177b2ab3a5b21624f25)
+![文章详情页](./img/pc文章详情页)
 
 
-![image.png](https://static.developers.pub/83e559536c0e48408d276f96de9ed5fc)
+![image.png](./img/手机文章详情页)
 
 
 
 - 标签详情页
 
 
-![标签详情页]( https://static.developers.pub/57d3af8df85e421fba035dcc688fbf1c)
+![标签详情页](./img/pc标签详情页)
 
 
 - 搜索页
 
 
-![image.png](https://static.developers.pub/47dfbec4db884c668734df94749d2410)
+![image.png](./img/pc搜索页)
 
 
 
 - 用户主页
 
 
-![用户主页](https://static.developers.pub/37da306856a844f5b6e9194f8a3217f2)
+![用户主页](./img/pc用户主页)
 
 
-![image.png](https://static.developers.pub/02897af0bc794e3b9b9a4cc8d429cd14)
+![image.png](./img/手机用户主页)
 
 
 
 - 写文章页
 
-![写文章页]( https://static.developers.pub/359f88bd5c6240b7aceb52cbf4f23ed5)
+![写文章页](./img/pc写文章页)
 
 
-# 五 管理后台页面
+## 管理后台页面
 
 
-![image.png](https://static.developers.pub/17475abfff6442fc8cb102301379c0e0)
+![image.png](./img/管理后台)
+
+# 安装
+
+请参考 [forum-java安装指南](https://www.developers.pub/article/171)。
+
+
+# 授权
+
+- 社区版：使用 MIT 开源，如果你选择使用社区版，则必须完全遵守 MIT 的相关条款；公司使用必须购买商用授权；
+- 商业版：提供完整源码以便二开，报价 ¥16000；
+
+**企业网站、经营性网站、以营利为目的或实现盈利的网站请购买商业版。**
+

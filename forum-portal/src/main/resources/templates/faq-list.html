@@ -29,6 +29,10 @@
 
         <!-- 常见问题 -->
         <div th:replace="include/posts-card :: posts_card('常见问题', '#', '/faq/', ${hotFaqList})"></div>
+
+        <!-- 轮播图 -->
+        <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
+
     </right>
 </div>
 

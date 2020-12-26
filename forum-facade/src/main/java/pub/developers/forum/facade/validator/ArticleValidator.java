@@ -1,7 +1,7 @@
 package pub.developers.forum.facade.validator;
 
 import pub.developers.forum.api.request.article.ArticleAddTypeRequest;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.article.ArticleSaveArticleRequest;
 import pub.developers.forum.common.support.CheckUtil;
 
@@ -12,7 +12,7 @@ import pub.developers.forum.common.support.CheckUtil;
  **/
 public class ArticleValidator {
 
-    public static void validatorBooleanRequest(ArticleAdminBooleanRequest booleanRequest) {
+    public static void validatorBooleanRequest(AdminBooleanRequest booleanRequest) {
         CheckUtil.checkParamToast(booleanRequest, "request");
         CheckUtil.checkParamToast(booleanRequest.getId(), "id");
         CheckUtil.checkParamToast(booleanRequest.getIs(), "is");

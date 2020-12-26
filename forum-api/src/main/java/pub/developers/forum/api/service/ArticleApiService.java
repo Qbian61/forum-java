@@ -3,6 +3,7 @@ package pub.developers.forum.api.service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.article.*;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
@@ -35,13 +36,13 @@ public interface ArticleApiService {
 
     ResultModel<ArticleInfoResponse> info(Long id);
 
-    ResultModel adminTop(ArticleAdminBooleanRequest booleanRequest);
+    ResultModel adminTop(AdminBooleanRequest booleanRequest);
 
-    ResultModel adminOfficial(ArticleAdminBooleanRequest booleanRequest);
+    ResultModel adminOfficial(AdminBooleanRequest booleanRequest);
 
-    ResultModel adminMarrow(ArticleAdminBooleanRequest booleanRequest);
+    ResultModel adminMarrow(AdminBooleanRequest booleanRequest);
 
     ResultModel<PageResponseModel<ArticleQueryTypesResponse>> typePage(PageRequestModel<ArticleAdminTypePageRequest> pageRequestModel);
 
-    ResultModel typeAuditState(ArticleAdminBooleanRequest booleanRequest);
+    ResultModel typeAuditState(AdminBooleanRequest booleanRequest);
 }

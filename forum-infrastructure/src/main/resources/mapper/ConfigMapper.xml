@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pub.developers.forum.infrastructure.dal.dao.ConfigDAO">
+
+    <resultMap id="resultMap" type="pub.developers.forum.infrastructure.dal.dataobject.ConfigDO">
+        <id column="id" property="id"/>
+        <id column="is_delete" property="isDelete"/>
+        <id column="create_at" property="createAt"/>
+        <id column="update_at" property="updateAt"/>
+
+        <result column="state" property="state"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="start_at" property="startAt"/>
+        <result column="end_at" property="endAt"/>
+        <result column="creator" property="creator"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id, is_delete, create_at, update_at,
+        state, type, name, content, start_at, end_at, creator
+    </sql>
+
+    <sql id="table_name">forum_config</sql>
+
+    <sql id="where_clause_do" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            is_delete = 0
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="name != null">
+                and name like concat('%', #{name}, '%')
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="pub.developers.forum.infrastructure.dal.dataobject.ConfigDO">
+        INSERT INTO <include refid="table_name"/>
+        ( state, type, name, content, start_at, end_at, creator, create_at )
+        VALUES
+        (
+        #{state},
+        #{type},
+        #{name},
+        #{content},
+        #{startAt},
+        #{endAt},
+        #{creator},
+        #{createAt}
+        )
+    </insert>
+
+    <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.ConfigDO" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        <include refid="where_clause_do"/>
+        ORDER BY id DESC
+    </select>
+
+    <select id="queryAvailable" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where type in
+        <foreach collection="types" item="type" open="(" separator="," close=")">
+            #{type}
+        </foreach>
+        and start_at <![CDATA[ <= ]]> #{nowDate}
+        and end_at <![CDATA[ >= ]]> #{nowDate}
+        and state = #{state}
+    </select>
+
+    <update id="update" parameterType="pub.developers.forum.infrastructure.dal.dataobject.ConfigDO">
+        update <include refid="table_name"/>
+        <set>
+            <if test ='null != isDelete'>is_delete = #{isDelete},</if>
+            <if test ='null != state'>state = #{state},</if>
+            <if test ='null != type'>type = #{type},</if>
+            <if test ='null != name'>name = #{name},</if>
+            <if test ='null != content'>content = #{content},</if>
+            <if test ='null != startAt'>start_at = #{startAt},</if>
+            <if test ='null != endAt'>end_at = #{endAt}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="get" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where id = #{id}
+    </select>
+
+</mapper>

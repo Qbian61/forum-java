@@ -1,5 +1,6 @@
 package pub.developers.forum.portal.controller;
 
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +11,12 @@ import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.request.faq.FaqUserPageRequest;
+import pub.developers.forum.api.response.config.ConfigResponse;
 import pub.developers.forum.api.response.faq.FaqHotsResponse;
 import pub.developers.forum.api.response.faq.FaqUserPageResponse;
+import pub.developers.forum.api.service.ConfigApiService;
 import pub.developers.forum.api.service.FaqApiService;
+import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.FaqRequest;
 import pub.developers.forum.portal.support.GlobalViewConfig;
@@ -41,6 +45,9 @@ public class FaqListController {
 
     @Resource
     private GlobalViewConfig globalViewConfig;
+
+    @Resource
+    private ConfigApiService configApiService;
 
     private static final String ALL_TYPE_NAME = "全部问答";
     private static final String SOLVED_TYPE_NAME = "已解决";
@@ -77,6 +84,13 @@ public class FaqListController {
             PageResponseModel pageResponseModel = new PageResponseModel();
             pageResponseModel.setTotal(0L);
             model.addAttribute("pager", pager(request, pageResponseModel));
+        }
+
+        ResultModel<List<ConfigResponse>> configResult = configApiService.queryAvailable(Sets.newHashSet(ConfigTypeEn.SIDEBAR_CAROUSEL.getValue()));
+        if (configResult.getSuccess() && !ObjectUtils.isEmpty(configResult.getData())) {
+            model.addAttribute("sideCarouselList", webUtil.carouselList(configResult.getData(), ConfigTypeEn.SIDEBAR_CAROUSEL));
+        } else {
+            model.addAttribute("sideCarouselList", new ArrayList<>());
         }
 
         return "faq-list";

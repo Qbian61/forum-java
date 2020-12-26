@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.article.*;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
@@ -87,7 +88,7 @@ public class ArticleApiServiceImpl implements ArticleApiService {
     }
 
     @Override
-    public ResultModel adminTop(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel adminTop(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         articleManager.adminTop(booleanRequest);
@@ -96,7 +97,7 @@ public class ArticleApiServiceImpl implements ArticleApiService {
     }
 
     @Override
-    public ResultModel adminOfficial(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel adminOfficial(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         articleManager.adminOfficial(booleanRequest);
@@ -105,7 +106,7 @@ public class ArticleApiServiceImpl implements ArticleApiService {
     }
 
     @Override
-    public ResultModel adminMarrow(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel adminMarrow(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         articleManager.adminMarrow(booleanRequest);
@@ -121,7 +122,7 @@ public class ArticleApiServiceImpl implements ArticleApiService {
     }
 
     @Override
-    public ResultModel typeAuditState(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel typeAuditState(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         articleManager.typeAuditState(booleanRequest);

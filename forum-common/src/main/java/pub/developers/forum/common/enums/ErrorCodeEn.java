@@ -68,6 +68,8 @@ public enum ErrorCodeEn {
     FILE_UPLOAD_NOT_SUPPORT_IMG_TYPE(4997, "不支持的图片类型"),
 
     MESSAGE_NOT_EXIST(3999, "消息不存在"),
+
+    CONFIG_NOT_EXIST(2999, "配置不存在"),
     ;
 
 

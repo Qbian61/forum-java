@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
-import pub.developers.forum.api.request.faq.FaqAdminPageRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
 import pub.developers.forum.api.request.tag.TagPageRequest;
 import pub.developers.forum.api.response.tag.TagPageResponse;
@@ -26,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/admin-rest/tag")
-public class AdminTagController {
+public class AdminRestTagController {
 
     @Resource
     private TagApiService tagApiService;
@@ -40,7 +39,7 @@ public class AdminTagController {
     }
 
     @PostMapping("/audit-state")
-    public ResultModel auditState(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel auditState(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return tagApiService.auditState(booleanRequest);

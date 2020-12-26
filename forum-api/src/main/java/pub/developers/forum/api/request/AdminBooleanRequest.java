@@ -1,4 +1,4 @@
-package pub.developers.forum.api.request.article;
+package pub.developers.forum.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,9 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleAdminBooleanRequest implements Serializable {
+public class AdminBooleanRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 

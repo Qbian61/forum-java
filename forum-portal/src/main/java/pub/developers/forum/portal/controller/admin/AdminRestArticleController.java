@@ -5,7 +5,7 @@ import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.request.article.ArticleAddTypeRequest;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.article.ArticleAdminPageRequest;
 import pub.developers.forum.api.request.article.ArticleAdminTypePageRequest;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
@@ -50,28 +50,28 @@ public class AdminRestArticleController {
     }
 
     @PostMapping("/top")
-    public ResultModel top(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel top(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return articleApiService.adminTop(booleanRequest);
     }
 
     @PostMapping("/official")
-    public ResultModel official(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel official(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return articleApiService.adminOfficial(booleanRequest);
     }
 
     @PostMapping("/marrow")
-    public ResultModel marrow(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel marrow(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return articleApiService.adminMarrow(booleanRequest);
     }
 
     @PostMapping("/audit-state")
-    public ResultModel auditState(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel auditState(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return postsApiService.auditState(booleanRequest);
@@ -85,7 +85,7 @@ public class AdminRestArticleController {
     }
 
     @PostMapping("/type-audit-state")
-    public ResultModel typeAuditState(@RequestBody ArticleAdminBooleanRequest booleanRequest, HttpServletRequest request) {
+    public ResultModel typeAuditState(@RequestBody AdminBooleanRequest booleanRequest, HttpServletRequest request) {
         request.setAttribute(Constant.REQUEST_HEADER_TOKEN_KEY, WebUtil.cookieGetSid(request));
 
         return articleApiService.typeAuditState(booleanRequest);

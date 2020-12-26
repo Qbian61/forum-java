@@ -1,6 +1,7 @@
 package pub.developers.forum.portal.support;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,10 +13,13 @@ import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleUserPageResponse;
+import pub.developers.forum.api.response.config.ConfigResponse;
 import pub.developers.forum.api.response.faq.FaqInfoResponse;
 import pub.developers.forum.api.response.faq.FaqUserPageResponse;
+import pub.developers.forum.api.service.ConfigApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.common.constant.Constant;
+import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
 
 import javax.annotation.Resource;
@@ -246,6 +250,27 @@ public class WebUtil {
         return articleList;
     }
 
+    public List<Map<String, Object>> carouselList(List<ConfigResponse> configResponses, ConfigTypeEn configType) {
+        List<Map<String, Object>> carouselList = new ArrayList<>();
+
+        SafesUtil.ofList(configResponses).forEach(configResponse -> {
+            if (!configType.getDesc().equals(configResponse.getType())) {
+                return;
+            }
+
+            JSONObject jsonObject = JSON.parseObject(configResponse.getContent());
+
+            Map<String, Object> carousel = new HashMap<>();
+            carousel.put("imgUrl", getImgUrl(jsonObject.getString("imgUrl")));
+            carousel.put("name", configResponse.getName());
+            carousel.put("actionUrl", jsonObject.get("actionUrl"));
+
+            carouselList.add(carousel);
+        });
+
+        return carouselList;
+    }
+
     public Map<String, Object> buildPager(Integer pageNum, String queryPath, PageResponseModel pageResponseModel) {
         Long pageNo = Long.valueOf(pageNum);
 
@@ -317,6 +342,13 @@ public class WebUtil {
         return url;
     }
 
+    public String getImgUrl(String imgUrl) {
+        if (ObjectUtils.isEmpty(imgUrl) || !imgUrl.startsWith(accessDomain) || imgUrl.contains("?")) {
+            return imgUrl;
+        }
+        return imgUrl + globalViewConfig.getCdnImgStyle();
+    }
+
     private String htmlContent(String htmlContent) {
         String cdnImgStyle = globalViewConfig.getCdnImgStyle();
         if (ObjectUtils.isEmpty(cdnImgStyle)) {
@@ -327,10 +359,7 @@ public class WebUtil {
         Elements imgs = document.getElementsByTag("img");
         for (Element img: imgs) {
             String src = img.attr("src");
-            if (ObjectUtils.isEmpty(src) || !src.startsWith(accessDomain) || src.contains("?")) {
-                continue;
-            }
-            img.attr("src", src + cdnImgStyle);
+            img.attr("src", getImgUrl(src));
         }
 
         return document.toString();

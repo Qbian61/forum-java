@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
 import pub.developers.forum.api.request.tag.TagPageRequest;
 import pub.developers.forum.api.response.tag.TagPageResponse;
@@ -89,7 +89,7 @@ public class TagManager extends AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void tagAuditState(ArticleAdminBooleanRequest booleanRequest) {
+    public void tagAuditState(AdminBooleanRequest booleanRequest) {
         Tag tag = tagRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(tag, ErrorCodeEn.TAG_NOT_EXIST);
 

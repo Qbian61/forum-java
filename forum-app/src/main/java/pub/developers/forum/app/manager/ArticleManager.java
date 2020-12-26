@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
-import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.article.*;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
@@ -16,7 +16,6 @@ import pub.developers.forum.app.support.LoginUserContext;
 import pub.developers.forum.app.support.PageUtil;
 import pub.developers.forum.app.support.Pair;
 import pub.developers.forum.app.transfer.ArticleTransfer;
-import pub.developers.forum.app.transfer.OptLogTransfer;
 import pub.developers.forum.common.enums.*;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.common.support.CheckUtil;
@@ -209,7 +208,7 @@ public class ArticleManager extends AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void adminTop(ArticleAdminBooleanRequest booleanRequest) {
+    public void adminTop(AdminBooleanRequest booleanRequest) {
         BasePosts basePosts = postsRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(basePosts, ErrorCodeEn.ARTICLE_NOT_EXIST);
 
@@ -219,7 +218,7 @@ public class ArticleManager extends AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void adminOfficial(ArticleAdminBooleanRequest booleanRequest) {
+    public void adminOfficial(AdminBooleanRequest booleanRequest) {
         BasePosts basePosts = postsRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(basePosts, ErrorCodeEn.ARTICLE_NOT_EXIST);
 
@@ -228,7 +227,7 @@ public class ArticleManager extends AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void adminMarrow(ArticleAdminBooleanRequest booleanRequest) {
+    public void adminMarrow(AdminBooleanRequest booleanRequest) {
         BasePosts basePosts = postsRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(basePosts, ErrorCodeEn.ARTICLE_NOT_EXIST);
 
@@ -237,7 +236,7 @@ public class ArticleManager extends AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void typeAuditState(ArticleAdminBooleanRequest booleanRequest) {
+    public void typeAuditState(AdminBooleanRequest booleanRequest) {
         ArticleType articleType = articleTypeRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(articleType, ErrorCodeEn.ARTICLE_TYPE_IS_EXIST);
 

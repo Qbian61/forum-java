@@ -9,7 +9,7 @@
 <div th:replace="include/container :: container_both(~{::left}, ~{::right})">
     <left>
         <!-- 轮播图 -->
-        <!--<div th:replace="include/carousel :: carousel('main_carousel', ${carouselList})"></div>-->
+        <div th:replace="include/carousel :: carousel('main_carousel', ${homeCarouselList})"></div>
 
         <!-- 类别筛选 -->
         <div th:replace="include/type-btns :: type_btns(${typeList})"></div>
@@ -34,14 +34,14 @@
             </div>
         </div>
 
-        <!-- 轮播图 -->
-        <!--<div th:replace="include/carousel :: carousel('side_carousel', ${carouselList})"></div>-->
-
         <!-- 公告 -->
         <div th:if="${!#lists.isEmpty(sideBarTypes)}"
              th:each="sideBarType : ${sideBarTypes}">
             <div th:replace="include/posts-card :: posts_card(${sideBarType.name}, ${'/?type=' + sideBarType.name}, '/article/', ${sideBarType.postsList})"></div>
         </div>
+
+        <!-- 轮播图 -->
+        <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
 
         <!-- 常见问题 -->
         <div th:replace="include/posts-card :: posts_card('常见问题', '/faq', '/faq/', ${hotFaqList})"></div>

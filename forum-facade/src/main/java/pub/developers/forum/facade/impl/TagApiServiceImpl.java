@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.tag.TagCreateRequest;
 import pub.developers.forum.api.request.tag.TagPageRequest;
 import pub.developers.forum.api.response.tag.TagPageResponse;
@@ -74,7 +74,7 @@ public class TagApiServiceImpl implements TagApiService {
     }
 
     @Override
-    public ResultModel auditState(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel auditState(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         tagManager.tagAuditState(booleanRequest);

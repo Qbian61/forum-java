@@ -3,7 +3,7 @@ package pub.developers.forum.app.manager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageResponseModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.app.support.IsLogin;
 import pub.developers.forum.app.support.LoginUserContext;
@@ -22,7 +22,6 @@ import pub.developers.forum.domain.entity.Tag;
 import pub.developers.forum.domain.repository.CommentRepository;
 import pub.developers.forum.domain.repository.PostsRepository;
 import pub.developers.forum.domain.repository.TagRepository;
-import pub.developers.forum.domain.repository.UserRepository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public abstract class AbstractPostsManager {
     }
 
     @IsLogin(role = UserRoleEn.ADMIN)
-    public void auditState(ArticleAdminBooleanRequest booleanRequest) {
+    public void auditState(AdminBooleanRequest booleanRequest) {
         BasePosts basePosts = postsRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(basePosts, ErrorCodeEn.ARTICLE_NOT_EXIST);
 

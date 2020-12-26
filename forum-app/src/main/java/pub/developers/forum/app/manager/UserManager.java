@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.user.*;
 import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
@@ -298,7 +298,7 @@ public class UserManager {
     }
 
     @IsLogin(role = UserRoleEn.SUPER_ADMIN)
-    public void updateRole(ArticleAdminBooleanRequest booleanRequest) {
+    public void updateRole(AdminBooleanRequest booleanRequest) {
         User user = userRepository.get(booleanRequest.getId());
         CheckUtil.isEmpty(user, ErrorCodeEn.USER_NOT_EXIST);
 

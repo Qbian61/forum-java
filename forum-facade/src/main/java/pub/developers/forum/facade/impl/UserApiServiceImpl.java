@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
-import pub.developers.forum.api.request.article.ArticleAdminBooleanRequest;
+import pub.developers.forum.api.request.AdminBooleanRequest;
 import pub.developers.forum.api.request.user.*;
 import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
@@ -155,7 +155,7 @@ public class UserApiServiceImpl implements UserApiService {
     }
 
     @Override
-    public ResultModel updateRole(ArticleAdminBooleanRequest booleanRequest) {
+    public ResultModel updateRole(AdminBooleanRequest booleanRequest) {
         ArticleValidator.validatorBooleanRequest(booleanRequest);
 
         userManager.updateRole(booleanRequest);

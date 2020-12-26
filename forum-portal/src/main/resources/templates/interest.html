@@ -30,6 +30,10 @@
 
         <!-- 活跃用户 -->
         <div th:replace="include/users-card :: users_card('最近活跃用户', 'javascript:;', ${activeUsers})"></div>
+
+        <!-- 轮播图 -->
+        <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
+
     </right>
 </div>
 

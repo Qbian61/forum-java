@@ -1,5 +1,6 @@
 package pub.developers.forum.portal.controller;
 
+import com.google.common.collect.Sets;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -8,11 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
+import pub.developers.forum.api.response.config.ConfigResponse;
 import pub.developers.forum.api.response.user.UserPageResponse;
+import pub.developers.forum.api.service.ConfigApiService;
 import pub.developers.forum.api.service.PostsApiService;
 import pub.developers.forum.api.service.UserApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.common.constant.Constant;
+import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.BasePageRequest;
 import pub.developers.forum.portal.support.GlobalViewConfig;
@@ -48,6 +52,9 @@ public class InterestController {
     @Resource
     private GlobalViewConfig globalViewConfig;
 
+    @Resource
+    private ConfigApiService configApiService;
+
     @GetMapping
     public String index(BasePageRequest pageRequest, Model model, HttpServletRequest request) {
         if (ObjectUtils.isEmpty(WebUtil.cookieGetSid(request))) {
@@ -75,6 +82,13 @@ public class InterestController {
             model.addAttribute("pager", pager(pageRequest, pageResponseModel));
         }
         model.addAttribute("activeUsers", activeUsers());
+
+        ResultModel<List<ConfigResponse>> configResult = configApiService.queryAvailable(Sets.newHashSet(ConfigTypeEn.SIDEBAR_CAROUSEL.getValue()));
+        if (configResult.getSuccess() && !ObjectUtils.isEmpty(configResult.getData())) {
+            model.addAttribute("sideCarouselList", webUtil.carouselList(configResult.getData(), ConfigTypeEn.SIDEBAR_CAROUSEL));
+        } else {
+            model.addAttribute("sideCarouselList", new ArrayList<>());
+        }
 
         return "interest";
     }

@@ -1,5 +1,6 @@
 package pub.developers.forum.portal.controller;
 
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,12 @@ import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.request.article.ArticleUserPageRequest;
 import pub.developers.forum.api.response.article.ArticleQueryTypesResponse;
 import pub.developers.forum.api.response.article.ArticleUserPageResponse;
+import pub.developers.forum.api.response.config.ConfigResponse;
 import pub.developers.forum.api.response.faq.FaqHotsResponse;
 import pub.developers.forum.api.service.ArticleApiService;
+import pub.developers.forum.api.service.ConfigApiService;
 import pub.developers.forum.api.service.FaqApiService;
+import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.support.GlobalViewConfig;
 import pub.developers.forum.portal.support.WebConst;
@@ -52,6 +56,9 @@ public class IndexController {
     @Resource
     private GlobalViewConfig globalViewConfig;
 
+    @Resource
+    private ConfigApiService configApiService;
+
     @GetMapping
     public String index(IndexRequest request, Model model) {
         request.setType(ObjectUtils.isEmpty(request.getType()) ? ALL_TYPE_NAME : request.getType());
@@ -59,16 +66,19 @@ public class IndexController {
         model.addAttribute("currentDomain", WebConst.DOMAIN_ARTICLE);
         model.addAttribute("toast", request.getToast());
 
-        model.addAttribute("carouselList", carouselList());
-        model.addAttribute("sideBarTypes", sideBarTypes());
+        ResultModel<List<ConfigResponse>> configResult = configApiService.queryAvailable(Sets.newHashSet(ConfigTypeEn.HOME_CAROUSEL.getValue()
+                , ConfigTypeEn.SIDEBAR_CAROUSEL.getValue()));
+        if (configResult.getSuccess() && !ObjectUtils.isEmpty(configResult.getData())) {
+            model.addAttribute("homeCarouselList", webUtil.carouselList(configResult.getData(), ConfigTypeEn.HOME_CAROUSEL));
+            model.addAttribute("sideCarouselList", webUtil.carouselList(configResult.getData(), ConfigTypeEn.SIDEBAR_CAROUSEL));
+        } else {
+            model.addAttribute("homeCarouselList", new ArrayList<>());
+            model.addAttribute("sideCarouselList", new ArrayList<>());
+        }
 
-//        model.addAttribute("announcementList", sideBarTypes());
-//        model.addAttribute("activityList", typeList(activityTypeName));
+        model.addAttribute("sideBarTypes", sideBarTypes());
         model.addAttribute("hotFaqList", hotFaqList());
         model.addAttribute("typeList", typeList(request));
-//        model.addAttribute("activityTypeName", activityTypeName);
-//        model.addAttribute("announcementTypeName", announcementTypeName);
-
 
         // 文章列表请求参数
         ResultModel<PageResponseModel<ArticleUserPageResponse>> resultModel = userPage(request);
@@ -101,30 +111,6 @@ public class IndexController {
     private Map<String, Object> pager(IndexRequest request, PageResponseModel pageResponseModel) {
         String queryPath = "?type=" + request.getType() + "&" + WebConst.PAGE_NO_NAME + "=";
         return webUtil.buildPager(request.getPageNo(), queryPath, pageResponseModel);
-    }
-
-    private List<Map<String, Object>> carouselList() {
-        List<Map<String, Object>> carouselList = new ArrayList<>();
-
-        Map<String, Object> carousel0 = new HashMap<>();
-        carousel0.put("img", "https://static.runoob.com/images/mix/img_fjords_wide.jpg");
-        carousel0.put("title", "第一张图片");
-        carousel0.put("href", "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#link-urls");
-        carouselList.add(carousel0);
-
-        Map<String, Object> carousel1 = new HashMap<>();
-        carousel1.put("img", "https://static.runoob.com/images/mix/img_nature_wide.jpg");
-        carousel1.put("title", "Second slide label");
-        carousel1.put("href", "https://v4.bootcss.com/docs/utilities/flex/");
-        carouselList.add(carousel1);
-
-        Map<String, Object> carousel2 = new HashMap<>();
-        carousel2.put("img", "https://static.runoob.com/images/mix/img_mountains_wide.jpg");
-        carousel2.put("title", "第三章图片");
-        carousel2.put("href", "https://translate.google.cn/#view=home&op=translate&sl=auto&tl=en&text=%E7%AB%99%E5%86%85%E4%BF%A1");
-        carouselList.add(carousel2);
-
-        return carouselList;
     }
 
     private List<Map<String, Object>> hotFaqList() {

@@ -70,6 +70,9 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
         评论的文章
     搜索
         根据文章/问答标题/内容模糊搜索
+    配置
+        首页轮播图配置
+        侧边栏轮播图配置
         
 管理端
     用户管理
@@ -94,6 +97,9 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
         审核通过（可见）
         审核不过（不可见）
         新增标签
+    配置
+        首页轮播图配置
+        侧边栏轮播图配置
 ```
 
 ![开发者客栈.png](./img/功能列表)

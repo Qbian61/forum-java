@@ -63,7 +63,7 @@
         select followed
         from <include refid="table"/>
         where follower = #{follower}
-        and type = #{type}
+        and followed_type = #{type}
     </select>
 
 </mapper>

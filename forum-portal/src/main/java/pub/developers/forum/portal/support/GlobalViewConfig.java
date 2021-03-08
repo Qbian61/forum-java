@@ -16,8 +16,6 @@ public class GlobalViewConfig {
 
     private String cdnImgStyle;
 
-    private String websiteStartYear;
-
     private String websiteRecord;
 
     private Integer pageSize;

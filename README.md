@@ -1,8 +1,8 @@
-# forum-java
+# 一 forum-java
 
-spring boot框架开发的 [社区](https://www.developers.pub)：https://www.developers.pub
+spring boot框架开发的社区：https://www.developers.pub
 
-# 简介
+# 二 简介
 
 [forum-java](https://www.developers.pub/) 是一个开源的现代化社区平台，它实现了：
 
@@ -13,18 +13,20 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
 
 欢迎到 [开发者客栈](https://www.developers.pub/) 官方讨论区了解更多。同时也欢迎关注 开发者客栈 开源社区微信公众号 智猿其说：
 
-![开发者客栈.png](./img/qrcode_for_wx_public_account.jpg)
+ 
+![image.png](https://static.developers.pub/d6d7135e5dfe4af2b1e7067fe57ac836)
+ 
+
+# 三 为什么要做这个项目？
+
+- 企业在做开放平台领域建设，都需要一个开发者社区的网站供开发者学习交流（本项目参考了[微信开放平台](https://developers.weixin.qq.com/community/pay)、[头条开发者社区](https://forum.microapp.bytedance.com/mini-app)、[有赞云开发者社区](https://developers.youzanyun.com/)、[淘宝开放平台](https://open.bbs.taobao.com/list.html)等社区功能为需求背景开发）；
+- 市面上已有的开源社区大部分都是PHP语言的，Java开源的很少，spring boot框架开发的几乎没有。大多数互联网公司内部开发语言都是Java，很多都是spring boot/cloud开发框架，对于PHP开源的社区，无法很好的接入公司内部系统；
+- 现有的开源社区功能过于简单，无法满足企业的大部分需求；
+- 现有的开源社区界面风格老式，没有跟上时代发展的审美，且定制能力差；
+- 现有的开源社区缺乏实际运营需求的功能，管理功能过于简单，二开成本过高；
 
 
-# 为什么要做这个项目？
-
-- PHP语言较多，Java的很少，目前spring boot开源的更是几乎没有，无法很好的接入公司内部系统；
-- 很多社区功能过于简单，无法满足大部分需求；
-- 界面风格老式，没有跟上时代发展的审美；
-- 缺乏实际运营需求的功能，管理功能过于简单；
-
-
-# 功能列表
+# 四 功能列表
 
 ```$xslt
 
@@ -70,9 +72,6 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
         评论的文章
     搜索
         根据文章/问答标题/内容模糊搜索
-    配置
-        首页轮播图配置
-        侧边栏轮播图配置
         
 管理端
     用户管理
@@ -97,15 +96,13 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
         审核通过（可见）
         审核不过（不可见）
         新增标签
-    配置
-        首页轮播图配置
-        侧边栏轮播图配置
 ```
 
-![开发者客栈.png](./img/功能列表)
+ 
+![开发者客栈.png](https://static.developers.pub/8a71564c56c74416bb81ce87f3f2e719?)
+ 
 
-
-#  特性
+# 五 特性
 
 ##  前端
 
@@ -128,7 +125,7 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
 - 缓存服务抽象接口，可支持自定义接入企业内部缓存服务
 - 搜索服务抽象接口，可支持自定义接入企业内部搜索服务
 
-# 技术栈
+# 六 技术栈
 
 ## 后端
 
@@ -150,90 +147,101 @@ spring boot框架开发的 [社区](https://www.developers.pub)：https://www.de
 - 用户端UI框架：bootstrap
 - 管理后台UI框架 iview
 
-# 部分页面展示
+# 七 部分页面展示
 
 ## 用户页面展示
 
 - 首页
 
+ 
+![首页]( https://static.developers.pub/81c6695a0e374ea89eb4037ff248259c)
+ 
 
-![首页](./img/pc首页)
-
-
-![image.png](./img/手机首页)
+ 
+![image.png](https://static.developers.pub/5092d67341a14cc6b155d21727a79227)
+ 
 
 
 - 问答页
 
+ 
+![问答页]( https://static.developers.pub/bfe0760841cd444a88942b9131355d30)
+ 
 
-![问答页](./img/pc问答页)
-
-
-![image.png](./img/手机问答页)
+ 
+![image.png](https://static.developers.pub/ee20c1508a234b229613d681dc3cd913)
+ 
 
 
 - 关注页
 
-
-![image.png](./img/pc关注页)
-
+ 
+![image.png](https://static.developers.pub/cf523137fa964bb0a60691b7b37a2594)
+ 
 
 - 消息列表页
 
-![image.png](./img/pc消息列表页)
-
+ 
+![image.png](https://static.developers.pub/ff047bbafb6d43b2b497ee7188d5b6c2)
+ 
 
 - 文章详情页
 
-![文章详情页](./img/pc文章详情页)
+ 
+![文章详情页]( https://static.developers.pub/e537e76e4ad34177b2ab3a5b21624f25)
+ 
 
 
-![image.png](./img/手机文章详情页)
+ 
+![image.png](https://static.developers.pub/83e559536c0e48408d276f96de9ed5fc)
+ 
 
 
 
 - 标签详情页
 
-
-![标签详情页](./img/pc标签详情页)
-
+ 
+![标签详情页]( https://static.developers.pub/57d3af8df85e421fba035dcc688fbf1c)
+ 
 
 - 搜索页
 
-
-![image.png](./img/pc搜索页)
-
+ 
+![image.png](https://static.developers.pub/47dfbec4db884c668734df94749d2410)
+ 
 
 
 - 用户主页
 
+ 
+![用户主页](https://static.developers.pub/37da306856a844f5b6e9194f8a3217f2)
+ 
 
-![用户主页](./img/pc用户主页)
-
-
-![image.png](./img/手机用户主页)
-
+ 
+![image.png](https://static.developers.pub/02897af0bc794e3b9b9a4cc8d429cd14)
+ 
 
 
 - 写文章页
 
-![写文章页](./img/pc写文章页)
+ 
+![写文章页]( https://static.developers.pub/359f88bd5c6240b7aceb52cbf4f23ed5)
+ 
 
+# 八 管理后台页面
 
-## 管理后台页面
+ 
+![image.png](https://static.developers.pub/17475abfff6442fc8cb102301379c0e0)
+ 
 
-
-![image.png](./img/管理后台)
-
-# 安装
+# 九 安装
 
 请参考 [forum-java安装指南](https://www.developers.pub/article/171)。
 
 
-# 授权
+# 十 授权
 
 - 社区版：使用 MIT 开源，如果你选择使用社区版，则必须完全遵守 MIT 的相关条款；公司使用必须购买商用授权；
-- 商业版：提供完整源码以便二开，报价 ¥16000；
+- 商业版：提供完整源码以便二开，报价 ¥16000，[详情](https://www.developers.pub/article/264) ；
 
 **企业网站、经营性网站、以营利为目的或实现盈利的网站请购买商业版。**
-

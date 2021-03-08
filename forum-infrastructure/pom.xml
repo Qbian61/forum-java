@@ -15,11 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>pub.developers</groupId>
-            <artifactId>forum-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>pub.developers</groupId>
             <artifactId>forum-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

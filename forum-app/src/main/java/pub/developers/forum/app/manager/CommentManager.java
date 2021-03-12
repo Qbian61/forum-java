@@ -69,7 +69,7 @@ public class CommentManager {
         commentRepository.save(comment);
 
         // 增加帖子评论数
-        postsRepository.increaseComments(posts.getId());
+        postsRepository.increaseComments(posts.getId(), posts.getUpdateAt());
 
         Map<String, Object> msg = new HashMap<>();
         msg.put("commenter", LoginUserContext.getUser().getId());

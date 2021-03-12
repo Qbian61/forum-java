@@ -25,6 +25,6 @@ public class PostsInfoListener extends EventBus.EventHandler<BasePosts> {
 
     @Override
     public void onMessage(BasePosts posts) {
-        postsRepository.increaseViews(posts.getId());
+        postsRepository.increaseViews(posts.getId(), posts.getUpdateAt());
     }
 }

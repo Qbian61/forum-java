@@ -40,7 +40,7 @@ public class ApprovalManager {
                 .postsId(postsId)
                 .userId(LoginUserContext.getUser().getId())
                 .build());
-        postsRepository.increaseApproval(postsId);
+        postsRepository.increaseApproval(postsId, basePosts.getUpdateAt());
 
         EventBus.emit(EventBus.Topic.APPROVAL_CREATE, Pair.build(LoginUserContext.getUser().getId(), postsId));
 
@@ -56,7 +56,7 @@ public class ApprovalManager {
         CheckUtil.isEmpty(basePosts, ErrorCodeEn.POSTS_NOT_EXIST);
 
         approvalRepository.delete(approval.getId());
-        postsRepository.decreaseApproval(postsId);
+        postsRepository.decreaseApproval(postsId, basePosts.getUpdateAt());
 
         return basePosts.getApprovals() - 1;
     }

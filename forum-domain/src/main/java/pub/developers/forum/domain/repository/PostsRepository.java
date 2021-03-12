@@ -2,6 +2,7 @@ package pub.developers.forum.domain.repository;
 
 import pub.developers.forum.domain.entity.BasePosts;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -18,15 +19,15 @@ public interface PostsRepository {
 
     List<Long> getAllIdByAuthorId(Long authorId);
 
-    void increaseComments(Long id);
+    void increaseComments(Long id, Date updateAt);
 
-    void decreaseComments(Long id);
+    void decreaseComments(Long id, Date updateAt);
 
-    void increaseViews(Long id);
+    void increaseViews(Long id, Date updateAt);
 
-    void increaseApproval(Long id);
+    void increaseApproval(Long id, Date updateAt);
 
-    void decreaseApproval(Long id);
+    void decreaseApproval(Long id, Date updateAt);
 
     void delete(Long id);
 

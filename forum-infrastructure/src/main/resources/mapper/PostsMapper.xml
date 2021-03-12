@@ -207,19 +207,19 @@
 
     <update id="increaseComments">
         update <include refid="table_name"/>
-        set comments = comments + 1
+        set comments = comments + 1, update_at = #{updateAt}
         where id = #{id}
     </update>
 
     <update id="decreaseComments">
         update <include refid="table_name"/>
-        set comments = comments - 1
+        set comments = comments - 1, update_at = #{updateAt}
         where id = #{id}
     </update>
 
     <update id="increaseViews">
         update <include refid="table_name"/>
-        set views = views + 1
+        set views = views + 1, update_at = #{updateAt}
         where id = #{id}
     </update>
 
@@ -247,13 +247,13 @@
 
     <update id="increaseApproval">
         update <include refid="table_name"/>
-        set approvals = approvals + 1
+        set approvals = approvals + 1, update_at = #{updateAt}
         where id = #{id}
     </update>
 
     <update id="decreaseApproval">
         update <include refid="table_name"/>
-        set approvals = approvals - 1
+        set approvals = approvals - 1, update_at = #{updateAt}
         where id = #{id}
     </update>
 

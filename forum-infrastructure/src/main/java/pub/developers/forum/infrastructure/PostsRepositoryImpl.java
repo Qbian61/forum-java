@@ -10,6 +10,7 @@ import pub.developers.forum.infrastructure.dal.dataobject.PostsDO;
 import pub.developers.forum.infrastructure.transfer.PostsTransfer;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -40,28 +41,28 @@ public class PostsRepositoryImpl implements PostsRepository {
     }
 
     @Override
-    public void increaseComments(Long id) {
-        postsDAO.increaseComments(id);
+    public void increaseComments(Long id, Date updateAt) {
+        postsDAO.increaseComments(id, updateAt);
     }
 
     @Override
-    public void decreaseComments(Long id) {
-        postsDAO.decreaseComments(id);
+    public void decreaseComments(Long id, Date updateAt) {
+        postsDAO.decreaseComments(id, updateAt);
     }
 
     @Override
-    public void increaseViews(Long id) {
-        postsDAO.increaseViews(id);
+    public void increaseViews(Long id, Date updateAt) {
+        postsDAO.increaseViews(id, updateAt);
     }
 
     @Override
-    public void increaseApproval(Long id) {
-        postsDAO.increaseApproval(id);
+    public void increaseApproval(Long id, Date updateAt) {
+        postsDAO.increaseApproval(id, updateAt);
     }
 
     @Override
-    public void decreaseApproval(Long id) {
-        postsDAO.decreaseApproval(id);
+    public void decreaseApproval(Long id, Date updateAt) {
+        postsDAO.decreaseApproval(id, updateAt);
     }
 
     @Override

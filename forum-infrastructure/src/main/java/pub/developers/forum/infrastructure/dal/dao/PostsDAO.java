@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import pub.developers.forum.domain.entity.value.PostsPageQueryValue;
 import pub.developers.forum.infrastructure.dal.dataobject.PostsDO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -24,11 +25,11 @@ public interface PostsDAO {
 
     PostsDO get(Long id);
 
-    void increaseComments(@Param("id") Long id);
+    void increaseComments(@Param("id") Long id, @Param("updateAt") Date updateAt);
 
-    void decreaseComments(@Param("id") Long id);
+    void decreaseComments(@Param("id") Long id, @Param("updateAt") Date updateAt);
 
-    void increaseViews(Long id);
+    void increaseViews(@Param("id") Long id, @Param("updateAt") Date updateAt);
 
     List<PostsDO> queryOrderViews(@Param("category") String category, @Param("auditState") String auditState);
 
@@ -36,9 +37,9 @@ public interface PostsDAO {
 
     void delete(Long id);
 
-    void increaseApproval(Long id);
+    void increaseApproval(@Param("id") Long id, @Param("updateAt") Date updateAt);
 
-    void decreaseApproval(Long id);
+    void decreaseApproval(@Param("id") Long id, @Param("updateAt") Date updateAt);
 
     List<Long> getAllIdByAuthorId(@Param("authorId") Long authorId, @Param("auditState") String auditState);
 }

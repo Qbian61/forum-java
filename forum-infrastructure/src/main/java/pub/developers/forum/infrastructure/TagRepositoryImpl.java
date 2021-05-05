@@ -23,6 +23,7 @@ import pub.developers.forum.infrastructure.transfer.TagTransfer;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -139,10 +140,10 @@ public class TagRepositoryImpl extends AbstractPostsRepository implements TagRep
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
 
-        List<Long> postsIds = new ArrayList<>();
+        Set<Long> postsIds = new HashSet<>();
         tagPostsMappingDOS.forEach(tagPostsMappingDO -> postsIds.add(tagPostsMappingDO.getPostsId()));
 
-        return basePagePosts(postsIds, pageInfo, AuditStateEn.PASS);
+        return basePagePosts(new ArrayList<>(postsIds), pageInfo, AuditStateEn.PASS);
     }
 
     @Override

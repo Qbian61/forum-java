@@ -34,6 +34,8 @@
         <!-- 轮播图 -->
         <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
 
+        <!-- 常用标签 -->
+        <div th:replace="include/used-tags :: used_tags('常用标签', ${usedTags})"></div>
     </right>
 </div>
 

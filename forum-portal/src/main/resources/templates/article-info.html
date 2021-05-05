@@ -3,6 +3,7 @@
 <div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
     <title th:text="${posts.title}">开发者客栈</title>
 </div>
+<div th:replace="include/posts-style :: posts_style"></div>
 <body>
 <div th:replace="include/navbar :: header"></div>
 
@@ -11,6 +12,9 @@
         <div th:replace="include/posts-info :: posts_info(${posts}, '/article')"></div>
 
         <div th:replace="include/comment-list :: comment_list(${posts}, ${comments}, 'article', ${pager})"></div>
+
+        <!-- 相关阅读 -->
+        <div th:replace="include/related-posts :: related_posts(${relatedPosts})"></div>
     </left>
     <right>
         <div class="posts-author-box" style="text-align: center;">
@@ -35,11 +39,14 @@
 
         <!-- 作者其他文章 -->
         <div th:replace="include/posts-card :: posts_card('作者其他文章', ${'/user/' + posts.authorId}, '/article/', ${authArticleList})"></div>
+
+        <!-- 常用标签 -->
+        <div th:replace="include/used-tags :: used_tags('常用标签', ${usedTags})"></div>
     </right>
 </div>
 
 <div th:replace="include/footer :: footer"></div>
-<div th:replace="include/posts-style-script :: posts_style_script"></div>
+<div th:replace="include/posts-script :: posts_script"></div>
 <script>
 document.addEventListener('DOMContentLoaded', function (event) {
     if (document.querySelectorAll('pre code').length === 0) {

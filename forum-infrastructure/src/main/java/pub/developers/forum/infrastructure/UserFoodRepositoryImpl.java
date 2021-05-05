@@ -65,7 +65,7 @@ public class UserFoodRepositoryImpl extends AbstractPostsRepository implements U
         List<Long> postsIds = new ArrayList<>();
         userFoodDOS.forEach(userFoodDO -> postsIds.add(userFoodDO.getPostsId()));
 
-        return basePagePosts(postsIds, pageInfo);
+        return basePagePosts(postsIds, pageInfo, null);
     }
 
     @Override

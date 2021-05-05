@@ -240,6 +240,16 @@
         </foreach>
     </select>
 
+    <select id="queryInIdsAndState" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from <include refid="table_name"/>
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and audit_state = #{auditState}
+    </select>
+
     <delete id="delete">
         delete from <include refid="table_name"/>
         where id = #{id}

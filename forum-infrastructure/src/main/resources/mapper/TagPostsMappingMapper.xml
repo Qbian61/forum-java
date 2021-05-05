@@ -66,6 +66,16 @@
         </foreach>
     </select>
 
+    <select id="queryInTagIds" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM <include refid="table_name"/>
+        where tag_id IN
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        ORDER BY create_at DESC
+    </select>
+
     <select id="query" parameterType="pub.developers.forum.infrastructure.dal.dataobject.TagPostsMappingDO" resultMap="resultMap">
         SELECT <include refid="all_column"/>
         FROM <include refid="table_name"/>

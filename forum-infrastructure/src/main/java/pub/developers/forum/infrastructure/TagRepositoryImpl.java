@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.common.enums.ErrorCodeEn;
+import pub.developers.forum.common.enums.PostsCategoryEn;
 import pub.developers.forum.common.exception.BizException;
 import pub.developers.forum.common.model.PageRequest;
 import pub.developers.forum.common.model.PageResult;
@@ -121,10 +122,17 @@ public class TagRepositoryImpl extends AbstractPostsRepository implements TagRep
 
     @Override
     public PageResult<Posts> pagePosts(PageRequest<Long> pageRequest) {
+        PageRequest<Set<Long>> pageRequest1 = new PageRequest<>();
+        pageRequest1.setPageNo(pageRequest.getPageNo());
+        pageRequest1.setPageSize(pageRequest.getPageSize());
+        pageRequest1.setFilter(Sets.newHashSet(pageRequest.getFilter()));
+        return pagePostsByTagIds(pageRequest1);
+    }
+
+    @Override
+    public PageResult<Posts> pagePostsByTagIds(PageRequest<Set<Long>> pageRequest) {
         PageHelper.startPage(pageRequest.getPageNo(), pageRequest.getPageSize());
-        List<TagPostsMappingDO> tagPostsMappingDOS = tagPostsMappingDAO.query(TagPostsMappingDO.builder()
-                .tagId(pageRequest.getFilter())
-                .build());
+        List<TagPostsMappingDO> tagPostsMappingDOS = tagPostsMappingDAO.queryInTagIds(pageRequest.getFilter());
         PageInfo<TagPostsMappingDO> pageInfo = new PageInfo<>(tagPostsMappingDOS);
 
         if (ObjectUtils.isEmpty(tagPostsMappingDOS)) {
@@ -134,7 +142,7 @@ public class TagRepositoryImpl extends AbstractPostsRepository implements TagRep
         List<Long> postsIds = new ArrayList<>();
         tagPostsMappingDOS.forEach(tagPostsMappingDO -> postsIds.add(tagPostsMappingDO.getPostsId()));
 
-        return basePagePosts(postsIds, pageInfo);
+        return basePagePosts(postsIds, pageInfo, AuditStateEn.PASS);
     }
 
     @Override

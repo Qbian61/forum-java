@@ -82,6 +82,7 @@ public class InterestController {
             model.addAttribute("pager", pager(pageRequest, pageResponseModel));
         }
         model.addAttribute("activeUsers", activeUsers());
+        model.addAttribute("usedTags", webUtil.usedTags());
 
         ResultModel<List<ConfigResponse>> configResult = configApiService.queryAvailable(Sets.newHashSet(ConfigTypeEn.SIDEBAR_CAROUSEL.getValue()));
         if (configResult.getSuccess() && !ObjectUtils.isEmpty(configResult.getData())) {

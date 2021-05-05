@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="related_posts(relatedPosts)" th:if="${!#lists.isEmpty(relatedPosts)}"
+     class="posts-box" style="padding: 0;">
+  <!-- 文章列表 -->
+  <div class="card-header" style="background:#fff;"><span>推荐阅读</span></div>
+  <div class="list-group" style="border-bottom:none;">
+    <div th:each="article : ${relatedPosts}" class="list-group-item list-group-item-action">
+      <div>
+        <div>
+          <a th:text="${article.title}"
+             th:href="${(article.category == 'ARTICLE' ? '/article/' : '/faq/') + article.id}"
+             target="_blank"
+             class="posts-list-title">又到一年一度双十一，你的购物车加满了吗？来对比一下李佳琦和薇娅直播间双十一清单，看哪些产品值得买</a>
+        </div>
+      </div>
+
+      <div class="posts-list-payload-box">
+        <small class="text-muted" style="margin-right: 10px;">
+          <a th:href="${'/user/' + article.authorId}" target="_blank" href="#">
+            <img th:src="${article.authorHeadImg}" src="https://www.gravatar.com/avatar/6455e40915d4eac16ed07145a63ab474?d=retro" style="width: 16px;height: 16px;" />&nbsp;
+            <span th:text="${article.authorName}" class="posts-list-payload-box-author">qbian</span>
+          </a>
+        </small>
+        <small class="text-muted posts-list-payload-item">
+          <i data-feather="clock" style="width: 14px;height: 14px;"></i>&nbsp;
+          <span th:text="${article.createdAt}">3天前</span>
+        </small>
+        <small class="text-muted posts-list-payload-item">
+          <i data-feather="eye" style="width: 14px;height: 14px;"></i>&nbsp;
+          <span th:text="${article.views}">2020</span>
+        </small>
+        <small class="text-muted posts-list-payload-item">
+          <i th:data-feather="${article.category == 'FAQ' ? 'heart' : 'thumbs-up'}" style="width: 14px;height: 14px;"></i>&nbsp;
+          <span th:text="${article.approvals}">10</span>
+        </small>
+        <small class="text-muted posts-list-payload-item">
+          <i data-feather="message-circle" style="width: 14px;height: 14px;"></i>&nbsp;
+          <span th:text="${article.comments}">2020</span>
+        </small>
+        <small class="text-muted posts-list-payload-item">
+          <i data-feather="tag" style="width: 14px;height: 14px;"></i>
+          <a th:each="tag : ${article.tagList}"
+             th:href="${'/tag/' + tag.name}"
+             th:text="${tag.name}"
+             style="margin-left: 5px;" target="_blank" href="#">Java</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+</html>

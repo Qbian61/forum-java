@@ -79,6 +79,7 @@ public class IndexController {
         model.addAttribute("sideBarTypes", sideBarTypes());
         model.addAttribute("hotFaqList", hotFaqList());
         model.addAttribute("typeList", typeList(request));
+        model.addAttribute("usedTags", webUtil.usedTags());
 
         // 文章列表请求参数
         ResultModel<PageResponseModel<ArticleUserPageResponse>> resultModel = userPage(request);

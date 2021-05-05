@@ -22,4 +22,6 @@ public interface TagPostsMappingDAO {
     void batchInsert(List<TagPostsMappingDO> tagPostsMappingDOS);
 
     List<TagPostsMappingDO> queryInPostsIds(@Param("postsIds") Set<Long> postsIds);
+
+    List<TagPostsMappingDO> queryInTagIds(@Param("tagIds") Set<Long> tagIds);
 }

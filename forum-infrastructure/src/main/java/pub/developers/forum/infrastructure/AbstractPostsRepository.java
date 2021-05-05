@@ -2,6 +2,7 @@ package pub.developers.forum.infrastructure;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.util.ObjectUtils;
+import pub.developers.forum.common.enums.AuditStateEn;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.domain.entity.Posts;
@@ -43,8 +44,14 @@ public abstract class AbstractPostsRepository {
     @Resource
     TagDAO tagDAO;
 
-    public PageResult<Posts> basePagePosts(List<Long> postsIds, PageInfo pageInfo) {
-        List<PostsDO> queryPostsDOS = postsDAO.queryInIds(new HashSet<>(postsIds));
+    public PageResult<Posts> basePagePosts(List<Long> postsIds, PageInfo pageInfo, AuditStateEn auditStateEn) {
+        List<PostsDO> queryPostsDOS;
+        if (ObjectUtils.isEmpty(auditStateEn)) {
+            queryPostsDOS = postsDAO.queryInIds(new HashSet<>(postsIds));
+        } else {
+            queryPostsDOS = postsDAO.queryInIdsAndState(new HashSet<>(postsIds), auditStateEn.getValue());
+        }
+
         if (ObjectUtils.isEmpty(queryPostsDOS)) {
             return PageResult.build(pageInfo.getTotal(), pageInfo.getSize(), new ArrayList<>());
         }
@@ -57,7 +64,7 @@ public abstract class AbstractPostsRepository {
                 }
             }
             return null;
-        }).collect(Collectors.toList());
+        }).filter(postsDO -> !ObjectUtils.isEmpty(postsDO)).collect(Collectors.toList());
 
         Set<Long> userIds = SafesUtil.ofList(postsDOS).stream().map(PostsDO::getAuthorId).collect(Collectors.toSet());
         List<User> users = UserTransfer.toUsers(userDAO.queryInIds(userIds));

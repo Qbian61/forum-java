@@ -18,6 +18,7 @@ import pub.developers.forum.api.service.ApprovalApiService;
 import pub.developers.forum.api.service.CommentApiService;
 import pub.developers.forum.api.service.FaqApiService;
 import pub.developers.forum.api.service.UserApiService;
+import pub.developers.forum.api.vo.TagVO;
 import pub.developers.forum.common.constant.Constant;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.BasePageRequest;
@@ -26,6 +27,7 @@ import pub.developers.forum.portal.support.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Qiangqiang.Bian
@@ -72,6 +74,10 @@ public class FaqInfoController {
 
         PageResponseModel pageResponseModel = pickComment(model, id, pageRequest);
         model.addAttribute("pager", pager(pageRequest.getPageNo(), pageResponseModel));
+
+        Set<Long> tagIds = SafesUtil.ofList(faqInfoResponse.getTags()).stream().map(TagVO::getId).collect(Collectors.toSet());
+        model.addAttribute("relatedPosts", webUtil.relatedPosts(tagIds));
+        model.addAttribute("usedTags", webUtil.usedTags());
 
         return "faq-info";
     }

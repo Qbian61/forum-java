@@ -10,17 +10,22 @@ import org.jsoup.select.Elements;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
+import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.response.article.ArticleInfoResponse;
 import pub.developers.forum.api.response.article.ArticleUserPageResponse;
 import pub.developers.forum.api.response.config.ConfigResponse;
 import pub.developers.forum.api.response.faq.FaqInfoResponse;
 import pub.developers.forum.api.response.faq.FaqUserPageResponse;
+import pub.developers.forum.api.response.tag.TagQueryResponse;
 import pub.developers.forum.api.service.ConfigApiService;
+import pub.developers.forum.api.service.TagApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.common.constant.Constant;
 import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
+import pub.developers.forum.common.support.StringUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -41,6 +46,9 @@ public class WebUtil {
 
     @Resource
     private GlobalViewConfig globalViewConfig;
+
+    @Resource
+    private TagApiService tagApiService;
 
     private String accessDomain;
 
@@ -86,6 +94,66 @@ public class WebUtil {
         }
 
         return value;
+    }
+
+    public List<Map<String, Object>> relatedPosts(Set<Long> tagIds) {
+        List<Map<String, Object>> res = new ArrayList<>();
+
+        PageRequestModel<Set<Long>> pageRequestModel = new PageRequestModel<>();
+        pageRequestModel.setPageNo(1);
+        pageRequestModel.setPageSize(globalViewConfig.getPageSize());
+        pageRequestModel.setFilter(tagIds);
+
+        ResultModel<PageResponseModel<PostsVO>> resultModel = tagApiService.pagePostsByTagIds(pageRequestModel);
+        if (resultModel.getSuccess() && !ObjectUtils.isEmpty(resultModel.getData())) {
+            SafesUtil.ofList(resultModel.getData().getList()).forEach(response -> {
+                Map<String, Object> posts = new HashMap<>();
+                posts.put("id", response.getId());
+                posts.put("category", response.getCategory());
+                posts.put("categoryDesc", response.getCategoryDesc());
+                posts.put("title", response.getTitle());
+                posts.put("createdAt", dateShow(response.getCreateAt()));
+
+                posts.put("views", response.getViews());
+                posts.put("approvals", response.getApprovals());
+                posts.put("comments", response.getComments());
+
+                posts.put("authorId", response.getAuthorId());
+                posts.put("authorHeadImg", response.getAuthorAvatar());
+                posts.put("authorName", response.getAuthorNickname());
+
+                List<Map<String, Object>> tagList = new ArrayList<>();
+                SafesUtil.ofList(response.getTags()).forEach(tagVO -> {
+                    Map<String, Object> tag = new HashMap<>();
+                    tag.put("id", tagVO.getId());
+                    tag.put("name", tagVO.getName());
+                    tagList.add(tag);
+                });
+                posts.put("tagList", tagList);
+
+                res.add(posts);
+            });
+        }
+
+        return res;
+    }
+
+    public List<Map<String, Object>> usedTags() {
+        List<Map<String, Object>> res = new ArrayList<>();
+
+        ResultModel<List<TagQueryResponse>> resultModel = tagApiService.queryAllRef();
+        if (!resultModel.getSuccess()) {
+            return res;
+        }
+
+        SafesUtil.ofList(resultModel.getData()).forEach(tagQueryResponse -> {
+            Map<String, Object> tag = new HashMap<>();
+            tag.put("name", tagQueryResponse.getName());
+            tag.put("color", StringUtil.getColor(tagQueryResponse.getName()));
+            res.add(tag);
+        });
+
+        return res;
     }
 
     public Map<String, Object> buildPostsInfo(ArticleInfoResponse articleInfoResponse) {

@@ -1,5 +1,6 @@
 package pub.developers.forum.app.manager;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.model.PageRequestModel;
@@ -14,6 +15,7 @@ import pub.developers.forum.app.support.IsLogin;
 import pub.developers.forum.app.support.PageUtil;
 import pub.developers.forum.app.transfer.TagTransfer;
 import pub.developers.forum.common.enums.AuditStateEn;
+import pub.developers.forum.common.enums.CacheBizTypeEn;
 import pub.developers.forum.common.enums.ErrorCodeEn;
 import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.model.PageResult;
@@ -22,6 +24,7 @@ import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.domain.entity.Posts;
 import pub.developers.forum.domain.entity.Tag;
 import pub.developers.forum.domain.repository.TagRepository;
+import pub.developers.forum.domain.service.CacheService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,6 +41,16 @@ public class TagManager extends AbstractPostsManager {
 
     @Resource
     private TagRepository tagRepository;
+
+    @Resource
+    private CacheService cacheService;
+
+    private static final String ALL_USED_TAG_CACHE_KEY = "all_used_tag";
+
+    /**
+     * 1小时
+     */
+    private static final Long TAG_CACHE_EXPIRE_SECOND = 60 * 60L;
 
     @IsLogin(role = UserRoleEn.ADMIN)
     public void create(TagCreateRequest request) {
@@ -71,6 +84,12 @@ public class TagManager extends AbstractPostsManager {
         return pagePostsVO(pageResult);
     }
 
+    public PageResponseModel<PostsVO> pagePostsByTagIds(PageRequestModel<Set<Long>> pageRequestModel) {
+        PageResult<Posts> pageResult = tagRepository.pagePostsByTagIds(PageUtil.buildPageRequest(pageRequestModel, pageRequestModel.getFilter()));
+
+        return pagePostsVO(pageResult);
+    }
+
     @IsLogin(role = UserRoleEn.ADMIN)
     public PageResponseModel<TagPageResponse> page(PageRequestModel<TagPageRequest> pageRequestModel) {
         TagPageRequest tagPageRequest = pageRequestModel.getFilter();
@@ -95,5 +114,20 @@ public class TagManager extends AbstractPostsManager {
 
         tag.setAuditState(booleanRequest.getIs() ? AuditStateEn.PASS : AuditStateEn.REJECT);
         tagRepository.update(tag);
+    }
+
+    public List<TagQueryResponse> queryAllRef() {
+        String cache = cacheService.get(CacheBizTypeEn.TAG_USED, ALL_USED_TAG_CACHE_KEY);
+
+        List<Tag> cacheTags;
+        if (ObjectUtils.isEmpty(cache)) {
+            List<Tag> tags = tagRepository.queryByState(AuditStateEn.PASS);
+            cacheTags = SafesUtil.ofList(tags).stream().filter(tag -> tag.getRefCount() > 0).collect(Collectors.toList());
+            cacheService.setAndExpire(CacheBizTypeEn.TAG_USED, ALL_USED_TAG_CACHE_KEY, JSON.toJSONString(cacheTags), TAG_CACHE_EXPIRE_SECOND);
+        } else {
+            cacheTags = JSON.parseArray(cache, Tag.class);
+        }
+
+        return TagTransfer.toTagQueryAllResponses(cacheTags);
     }
 }

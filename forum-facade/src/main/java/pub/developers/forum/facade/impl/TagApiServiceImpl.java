@@ -34,6 +34,11 @@ public class TagApiServiceImpl implements TagApiService {
     private TagManager tagManager;
 
     @Override
+    public ResultModel<List<TagQueryResponse>> queryAllRef() {
+        return ResultModelUtil.success(tagManager.queryAllRef());
+    }
+
+    @Override
     public ResultModel create(TagCreateRequest request) {
         TagValidator.create(request);
 
@@ -64,6 +69,13 @@ public class TagApiServiceImpl implements TagApiService {
         PageRequestModelValidator.validator(pageRequestModel);
 
         return ResultModelUtil.success(tagManager.pagePosts(pageRequestModel));
+    }
+
+    @Override
+    public ResultModel<PageResponseModel<PostsVO>> pagePostsByTagIds(PageRequestModel<Set<Long>> pageRequestModel) {
+        PageRequestModelValidator.validator(pageRequestModel);
+
+        return ResultModelUtil.success(tagManager.pagePostsByTagIds(pageRequestModel));
     }
 
     @Override

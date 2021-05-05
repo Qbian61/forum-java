@@ -35,6 +35,8 @@ public interface PostsDAO {
 
     List<PostsDO> queryInIds(@Param("ids") Set<Long> ids);
 
+    List<PostsDO> queryInIdsAndState(@Param("ids") Set<Long> ids, @Param("auditState") String auditState);
+
     void delete(Long id);
 
     void increaseApproval(@Param("id") Long id, @Param("updateAt") Date updateAt);

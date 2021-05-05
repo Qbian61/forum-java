@@ -20,6 +20,8 @@ import java.util.Set;
  **/
 public interface TagApiService {
 
+    ResultModel<List<TagQueryResponse>> queryAllRef();
+
     ResultModel create(TagCreateRequest request);
 
     ResultModel<TagQueryResponse> getByName(String name);
@@ -29,6 +31,8 @@ public interface TagApiService {
     ResultModel<List<TagQueryResponse>> queryInIds(Set<Long> ids);
 
     ResultModel<PageResponseModel<PostsVO>> pagePosts(PageRequestModel<Long> pageRequestModel);
+
+    ResultModel<PageResponseModel<PostsVO>> pagePostsByTagIds(PageRequestModel<Set<Long>> pageRequestModel);
 
     ResultModel<PageResponseModel<TagPageResponse>> page(PageRequestModel<TagPageRequest> pageRequestModel);
 

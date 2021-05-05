@@ -71,6 +71,7 @@ public class FaqListController {
         model.addAttribute("currentDomain", WebConst.DOMAIN_FAQ);
         model.addAttribute("typeList", typeList(request));
         model.addAttribute("hotFaqList", hotFaqList());
+        model.addAttribute("usedTags", webUtil.usedTags());
 
         ResultModel<PageResponseModel<FaqUserPageResponse>> resultModel = userPage(request, solution);
         if (resultModel.getSuccess() && !ObjectUtils.isEmpty(resultModel.getData())) {

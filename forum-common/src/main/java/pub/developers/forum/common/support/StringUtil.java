@@ -19,6 +19,36 @@ public class StringUtil {
 
     private static final String MD5_PRE_KEY = "1357924680QWERqwer";
     private static final String MD5_POST_KEY = "0987654321zxcv";
+    private static final String[] COLOR_CODE = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
+
+    public static void main(String[] args) {
+        System.out.println(getColor(MD5_POST_KEY));
+    }
+
+    /**
+     * 获取16进制颜色值
+     * @param str
+     * @return
+     */
+    public static String getColor(String str) {
+        int hash = str.hashCode();
+        Integer[] rgb = new Integer[]{(hash & 0xFF0000) >> 16, (hash & 0x00FF00) >> 8, hash & 0x0000FF};
+
+        StringBuilder hexCode = new StringBuilder("#");
+        for (int i = 0; i < rgb.length; i ++) {
+            int rgbItem = rgb[i];
+
+            if (rgbItem < 0) {
+                rgbItem = 0;
+            } else if (rgbItem > 255){
+                rgbItem = 255;
+            }
+
+            hexCode.append(COLOR_CODE[rgbItem / 16]).append(COLOR_CODE[rgbItem % 16]);
+        }
+
+        return hexCode.toString();
+    }
 
     /**
      * 生成 uuid 字符串

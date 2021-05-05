@@ -1,6 +1,7 @@
 package pub.developers.forum.domain.repository;
 
 import pub.developers.forum.common.enums.AuditStateEn;
+import pub.developers.forum.common.enums.PostsCategoryEn;
 import pub.developers.forum.common.model.PageRequest;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.domain.entity.Posts;
@@ -33,6 +34,8 @@ public interface TagRepository {
     Tag getByNameAndState(String name, AuditStateEn pass);
 
     PageResult<Posts> pagePosts(PageRequest<Long> longPageRequest);
+
+    PageResult<Posts> pagePostsByTagIds(PageRequest<Set<Long>> pageRequest);
 
     PageResult<Tag> page(PageRequest<Tag> tagPageRequest);
 

@@ -49,7 +49,7 @@ public class DbSearchServiceImpl extends AbstractPostsRepository implements Sear
         List<Long> postsIds = new ArrayList<>();
         searchDOS.forEach(searchDO -> postsIds.add(searchDO.getEntityId()));
 
-        return basePagePosts(postsIds, pageInfo);
+        return basePagePosts(postsIds, pageInfo, null);
     }
 
     @Override

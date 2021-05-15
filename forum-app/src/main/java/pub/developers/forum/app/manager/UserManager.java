@@ -96,6 +96,9 @@ public class UserManager extends AbstractLoginManager {
 
         user.setState(UserStateEn.DISABLE);
         userRepository.update(user);
+
+        // 删除用户登录信息
+        deleteLoginUser(uid);
     }
 
     @IsLogin

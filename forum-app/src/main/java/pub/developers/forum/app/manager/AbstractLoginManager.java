@@ -44,16 +44,21 @@ public class AbstractLoginManager {
 
     protected void cacheLoginUser(String token, User user) {
         // 删除之前登录缓存
-        String oldToken = cacheService.get(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(user.getId()));
-        if (!ObjectUtils.isEmpty(oldToken)) {
-            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(user.getId()));
-            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, oldToken);
-        }
+        deleteLoginUser(user.getId());
 
         // 重新保存缓存
         cacheService.setAndExpire(CacheBizTypeEn.USER_LOGIN_TOKEN
                 , String.valueOf(user.getId()), token, USER_LOGIN_TOKEN_EXPIRE_TIMEOUT);
         cacheService.setAndExpire(CacheBizTypeEn.USER_LOGIN_TOKEN
                 , token, JSON.toJSONString(user), USER_LOGIN_TOKEN_EXPIRE_TIMEOUT);
+    }
+
+    protected void deleteLoginUser(Long userId) {
+        // 删除之前登录缓存
+        String oldToken = cacheService.get(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(userId));
+        if (!ObjectUtils.isEmpty(oldToken)) {
+            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(userId));
+            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, oldToken);
+        }
     }
 }

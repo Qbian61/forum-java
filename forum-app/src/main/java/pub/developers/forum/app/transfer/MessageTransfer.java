@@ -41,8 +41,10 @@ public class MessageTransfer {
                     || MessageTypeEn.COMMENT_ARTICLE.equals(message.getType())
                     || MessageTypeEn.COMMENT_FAQ.equals(message.getType())) {
                 SafesUtil.ofList(postsList).forEach(posts -> {
-                    messagePageResponse.setTitle(posts.getTitle());
-                    messagePageResponse.setInfoId(posts.getId().toString());
+                    if (posts.getId().equals(Long.valueOf(message.getTitle()))) {
+                        messagePageResponse.setTitle(posts.getTitle());
+                        messagePageResponse.setInfoId(posts.getId().toString());
+                    }
                 });
             }
             if (MessageTypeEn.FOLLOW_USER.equals(message.getType())) {

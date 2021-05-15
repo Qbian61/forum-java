@@ -18,7 +18,6 @@ import pub.developers.forum.common.enums.UserStateEn;
 import pub.developers.forum.common.support.*;
 import pub.developers.forum.domain.entity.Follow;
 import pub.developers.forum.domain.repository.OptLogRepository;
-import pub.developers.forum.domain.service.CacheService;
 import pub.developers.forum.app.support.LoginUserContext;
 import pub.developers.forum.app.transfer.UserTransfer;
 import pub.developers.forum.app.support.PageUtil;
@@ -28,7 +27,6 @@ import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.model.PageResult;
 import pub.developers.forum.domain.entity.OptLog;
 import pub.developers.forum.domain.entity.User;
-import pub.developers.forum.domain.repository.UserRepository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -42,21 +40,31 @@ import java.util.stream.Collectors;
  * @desc
  **/
 @Component
-public class UserManager {
-
-    @Resource
-    private UserRepository userRepository;
-
-    @Resource
-    private CacheService cacheService;
+public class UserManager extends AbstractLoginManager {
 
     @Resource
     private OptLogRepository optLogRepository;
 
     /**
-     * 用户登录凭证 token 过期时长（单位：秒）,7天
+     * 邮箱 + 密码 登录
+     * @param request
+     * @return
      */
-    private static final Long USER_LOGIN_TOKEN_EXPIRE_TIMEOUT = 60 * 60 * 24 * 7L;
+    public String emailRequestLogin(UserEmailLoginRequest request) {
+        // 判断邮箱是否存在
+        User user = userRepository.getByEmail(request.getEmail());
+        CheckUtil.isEmpty(user, ErrorCodeEn.USER_NOT_EXIST);
+        CheckUtil.isTrue(UserStateEn.DISABLE.equals(user.getState()), ErrorCodeEn.USER_STATE_IS_DISABLE);
+
+        // 判断登录密码是否正确
+        CheckUtil.isFalse(StringUtil.md5UserPassword(request.getPassword()).equals(user.getPassword()), ErrorCodeEn.USER_LOGIN_PWD_ERROR);
+
+        // 更新最后登录时间
+        user.setLastLoginTime(new Date());
+        userRepository.update(user);
+
+        return login(user, request);
+    }
 
     @IsLogin(role = UserRoleEn.ADMIN)
     public PageResponseModel<UserOptLogPageResponse> pageOptLog(PageRequestModel<UserOptLogPageRequest> pageRequestModel) {
@@ -150,27 +158,6 @@ public class UserManager {
     }
 
     /**
-     * 邮箱 + 密码 登录
-     * @param request
-     * @return
-     */
-    public String emailLogin(UserEmailLoginRequest request) {
-        // 判断邮箱是否存在
-        User user = userRepository.getByEmail(request.getEmail());
-        CheckUtil.isEmpty(user, ErrorCodeEn.USER_NOT_EXIST);
-        CheckUtil.isTrue(UserStateEn.DISABLE.equals(user.getState()), ErrorCodeEn.USER_STATE_IS_DISABLE);
-
-        // 判断登录密码是否正确
-        CheckUtil.isFalse(StringUtil.md5UserPassword(request.getPassword()).equals(user.getPassword()), ErrorCodeEn.USER_LOGIN_PWD_ERROR);
-
-        // 更新最后登录时间
-        user.setLastLoginTime(new Date());
-        userRepository.update(user);
-
-        return login(user, request);
-    }
-
-    /**
      * 登出
      * @param request
      */
@@ -253,17 +240,6 @@ public class UserManager {
         return PageUtil.buildPageResponseModel(pageResult, UserTransfer.toUserPageResponses(pageResult.getList()));
     }
 
-    private String login(User user, UserBaseLoginRequest baseLoginRequest) {
-        // 缓存登录凭证 token =》 user
-        String token = StringUtil.generateUUID();
-        cacheLoginUser(token, user);
-
-        // 触发保存操作日志事件
-        EventBus.emit(EventBus.Topic.USER_LOGIN, OptLog.createUserLoginRecordLog(user.getId(), JSON.toJSONString(baseLoginRequest)));
-
-        return token;
-    }
-
     private void updateCacheUser(User updateUser) {
         LoginUserContext.setUser(updateUser);
         cacheLoginUser(LoginUserContext.getToken(), updateUser);
@@ -282,20 +258,6 @@ public class UserManager {
         return loginUser;
     }
 
-    private void cacheLoginUser(String token, User user) {
-        // 删除之前登录缓存
-        String oldToken = cacheService.get(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(user.getId()));
-        if (!ObjectUtils.isEmpty(oldToken)) {
-            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, String.valueOf(user.getId()));
-            cacheService.del(CacheBizTypeEn.USER_LOGIN_TOKEN, oldToken);
-        }
-
-        // 重新保存缓存
-        cacheService.setAndExpire(CacheBizTypeEn.USER_LOGIN_TOKEN
-                , String.valueOf(user.getId()), token, USER_LOGIN_TOKEN_EXPIRE_TIMEOUT);
-        cacheService.setAndExpire(CacheBizTypeEn.USER_LOGIN_TOKEN
-                , token, JSON.toJSONString(user), USER_LOGIN_TOKEN_EXPIRE_TIMEOUT);
-    }
 
     @IsLogin(role = UserRoleEn.SUPER_ADMIN)
     public void updateRole(AdminBooleanRequest booleanRequest) {

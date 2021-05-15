@@ -20,6 +20,7 @@ import pub.developers.forum.api.service.FaqApiService;
 import pub.developers.forum.api.service.UserApiService;
 import pub.developers.forum.api.vo.TagVO;
 import pub.developers.forum.common.constant.Constant;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.BasePageRequest;
 import pub.developers.forum.portal.support.*;

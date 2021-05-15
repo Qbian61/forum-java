@@ -14,7 +14,7 @@ import pub.developers.forum.api.service.MessageApiService;
 import pub.developers.forum.common.constant.Constant;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.MessageRequest;
-import pub.developers.forum.portal.support.GlobalViewConfig;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.portal.support.ViewException;
 import pub.developers.forum.portal.support.WebConst;
 import pub.developers.forum.portal.support.WebUtil;

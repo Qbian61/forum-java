@@ -11,7 +11,7 @@ import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.service.SearchApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.portal.request.SearchRequest;
-import pub.developers.forum.portal.support.GlobalViewConfig;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.portal.support.WebConst;
 import pub.developers.forum.portal.support.WebUtil;
 

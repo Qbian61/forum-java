@@ -100,7 +100,7 @@ public class UserApiServiceImpl implements UserApiService {
     public ResultModel<String> emailLogin(UserEmailLoginRequest request) {
         UserValidator.emailLogin(request);
 
-        return ResultModelUtil.success(userManager.emailLogin(request));
+        return ResultModelUtil.success(userManager.emailRequestLogin(request));
     }
 
     @Override

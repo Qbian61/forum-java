@@ -11,16 +11,18 @@
 
         <result column="role" property="role"/>
         <result column="state" property="state"/>
+        <result column="source" property="source"/>
         <result column="nickname" property="nickname"/>
         <result column="sex" property="sex"/>
         <result column="avatar" property="avatar"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>
         <result column="signature" property="signature"/>
+        <result column="ext" property="ext"/>
         <result column="last_login_time" property="lastLoginTime" />
     </resultMap>
 
-    <sql id="allColumn">id, is_delete, create_at, update_at, role, state, nickname, sex, avatar, email, password, signature, last_login_time</sql>
+    <sql id="allColumn">id, is_delete, create_at, update_at, role, state, source, nickname, sex, avatar, email, password, signature, ext, last_login_time</sql>
 
     <sql id="tableName">forum_user</sql>
 
@@ -44,18 +46,20 @@
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="pub.developers.forum.infrastructure.dal.dataobject.UserDO">
         INSERT INTO <include refid="tableName"/>
-        (role, state, nickname, sex, avatar, email, password, signature, create_at, last_login_time)
+        (role, state, nickname, sex, source, avatar, email, password, signature, create_at, ext, last_login_time)
         VALUES
         (
         #{role},
         #{state},
         #{nickname},
         #{sex},
+        #{source},
         #{avatar},
         #{email},
         #{password},
         #{signature},
         #{createAt},
+        #{ext},
         #{lastLoginTime}
         )
     </insert>
@@ -77,12 +81,14 @@
         <set>
             <if test ='null != role'>role = #{role},</if>
             <if test ='null != state'>state = #{state},</if>
+            <if test ='null != source'>source = #{source},</if>
             <if test ='null != nickname'>nickname = #{nickname},</if>
             <if test ='null != sex'>sex = #{sex},</if>
             <if test ='null != avatar'>avatar = #{avatar},</if>
             <if test ='null != email'>email = #{email},</if>
             <if test ='null != password'>password = #{password},</if>
             <if test ='null != signature'>signature = #{signature},</if>
+            <if test ='null != ext'>ext = #{ext},</if>
             <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime}</if>
         </set>
         WHERE id = #{id}

@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
-import pub.developers.forum.api.response.article.ArticleUserPageResponse;
 import pub.developers.forum.api.response.tag.TagQueryResponse;
 import pub.developers.forum.api.service.TagApiService;
 import pub.developers.forum.api.vo.PostsVO;
 import pub.developers.forum.common.constant.Constant;
 import pub.developers.forum.portal.request.BasePageRequest;
-import pub.developers.forum.portal.request.IndexRequest;
-import pub.developers.forum.portal.support.GlobalViewConfig;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.portal.support.ViewException;
 import pub.developers.forum.portal.support.WebConst;
 import pub.developers.forum.portal.support.WebUtil;
@@ -26,7 +24,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -1,5 +1,6 @@
 package pub.developers.forum.app.transfer;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.ObjectUtils;
 import pub.developers.forum.api.request.user.UserAdminPageRequest;
 import pub.developers.forum.api.request.user.UserRegisterRequest;
@@ -9,6 +10,7 @@ import pub.developers.forum.api.response.user.UserOptLogPageResponse;
 import pub.developers.forum.api.response.user.UserPageResponse;
 import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.enums.UserSexEn;
+import pub.developers.forum.common.enums.UserSourceEn;
 import pub.developers.forum.common.enums.UserStateEn;
 import pub.developers.forum.common.support.DateUtil;
 import pub.developers.forum.common.support.SafesUtil;
@@ -70,10 +72,27 @@ public class UserTransfer {
         return users.stream().map(UserTransfer::buildUserPageResponse).collect(Collectors.toList());
     }
 
+    public static User toGithubUser(JSONObject githubUser, String email) {
+        return User.builder()
+                .email(email)
+                .state(UserStateEn.UN_ACTIVATION)
+                .source(UserSourceEn.GITHUB)
+                .nickname(githubUser.getString("name"))
+                .password(StringUtil.md5UserPassword(email))
+                .signature(githubUser.getString("bio"))
+                .role(UserRoleEn.USER)
+                .avatar(githubUser.getString("avatar_url"))
+                .sex(UserSexEn.UNKNOWN)
+                .githubUser(githubUser)
+                .lastLoginTime(new Date())
+                .build();
+    }
+
     public static User toUser(UserRegisterRequest request) {
         return User.builder()
                 .email(request.getEmail())
                 .state(UserStateEn.UN_ACTIVATION)
+                .source(UserSourceEn.REGISTER)
                 .nickname(request.getNickname())
                 .password(StringUtil.md5UserPassword(request.getPassword()))
                 .signature("")

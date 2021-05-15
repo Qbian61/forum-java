@@ -82,6 +82,11 @@
                     <button id="loginBtn" type="button" class="btn btn-primary">登录</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">去注册</button>
                 </div>
+                <div class="modal-footer third-oauth-login-box">
+                    <a th:href="${globalConfig.githubOauthUrl}" href="https://github.com/login/oauth/authorize?client_id=5c00b7f2065217732aa3&scope=user" target="_blank">
+                        <img src="https://static.developers.pub/f78f99e7a8f04dbf9dfccf5f1c3c6072" alt="github登录" width="40" height="40">
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -127,6 +132,11 @@
                 <div class="modal-footer">
                     <button id="registerBtn" type="button" class="btn btn-primary">注册</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">去登录</button>
+                </div>
+                <div class="modal-footer third-oauth-login-box">
+                    <a th:href="${globalConfig.githubOauthUrl}" href="https://github.com/login/oauth/authorize?client_id=5c00b7f2065217732aa3&scope=user" target="_blank">
+                        <img src="https://static.developers.pub/f78f99e7a8f04dbf9dfccf5f1c3c6072" alt="github登录" width="40" height="40">
+                    </a>
                 </div>
             </div>
         </div>

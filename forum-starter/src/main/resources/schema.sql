@@ -252,4 +252,7 @@ CREATE TABLE `forum_config` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='配置表';
 
+ALTER TABLE forum_user ADD `source` varchar(64) default 'REGISTER' COMMENT '来源' AFTER `sex`;
+ALTER TABLE forum_user ADD `ext` blob COMMENT '扩展信息' AFTER `signature`;
+
 SET FOREIGN_KEY_CHECKS = 1;

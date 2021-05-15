@@ -14,4 +14,5 @@ public class IndexRequest extends BasePageRequest {
 
     private String toast;
 
+    private String token;
 }

@@ -1,9 +1,11 @@
 package pub.developers.forum.domain.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 import pub.developers.forum.common.enums.UserRoleEn;
 import pub.developers.forum.common.enums.UserSexEn;
+import pub.developers.forum.common.enums.UserSourceEn;
 import pub.developers.forum.common.enums.UserStateEn;
 import pub.developers.forum.common.support.AvatarUtil;
 
@@ -41,6 +43,11 @@ public class User extends BaseEntity {
     private UserSexEn sex;
 
     /**
+     * 来源
+     */
+    private UserSourceEn source;
+
+    /**
      * 头像
      */
     private String avatar;
@@ -59,6 +66,11 @@ public class User extends BaseEntity {
      * 签名
      */
     private String signature;
+
+    /**
+     * githubUser
+     */
+    private JSONObject githubUser;
 
     /**
      * 最后登录时间

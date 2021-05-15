@@ -10,6 +10,7 @@ import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.service.MessageApiService;
 import pub.developers.forum.api.service.UserApiService;
 import pub.developers.forum.common.constant.Constant;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.common.support.RequestContext;
 
 import javax.annotation.Resource;

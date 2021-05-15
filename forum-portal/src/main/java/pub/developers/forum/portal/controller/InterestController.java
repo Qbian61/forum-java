@@ -19,7 +19,7 @@ import pub.developers.forum.common.constant.Constant;
 import pub.developers.forum.common.enums.ConfigTypeEn;
 import pub.developers.forum.common.support.SafesUtil;
 import pub.developers.forum.portal.request.BasePageRequest;
-import pub.developers.forum.portal.support.GlobalViewConfig;
+import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.portal.support.ViewException;
 import pub.developers.forum.portal.support.WebConst;
 import pub.developers.forum.portal.support.WebUtil;

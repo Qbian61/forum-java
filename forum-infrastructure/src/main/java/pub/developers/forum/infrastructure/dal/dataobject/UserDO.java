@@ -39,6 +39,11 @@ public class UserDO extends BaseDO {
     private String sex;
 
     /**
+     * 来源
+     */
+    private String source;
+
+    /**
      * 头像
      */
     private String avatar;
@@ -57,6 +62,11 @@ public class UserDO extends BaseDO {
      * 签名
      */
     private String signature;
+
+    /**
+     * 扩展信息
+     */
+    private String ext;
 
     /**
      * 最后登录时间

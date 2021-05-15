@@ -32,10 +32,14 @@ public class GithubManager extends AbstractLoginManager {
         JSONObject githubUser = githubService.getUserInfo(request.getCode());
 
         String email = githubUser.getString("email");
+        String nickname = githubUser.getString("name");
+        String signature = githubUser.getString("bio");
+        String avatar = githubUser.getString("avatar_url");
+
         User user = userRepository.getByEmail(email);
 
         if (ObjectUtils.isEmpty(user)) {
-            user = UserTransfer.toGithubUser(githubUser, email);
+            user = UserTransfer.toGithubUser(githubUser, email, nickname, signature, avatar);
             // 保存注册用户
             userRepository.save(user);
 
@@ -46,6 +50,10 @@ public class GithubManager extends AbstractLoginManager {
             user.setLastLoginTime(new Date());
             user.setSource(UserSourceEn.GITHUB);
             user.setGithubUser(githubUser);
+            user.setNickname(nickname);
+            user.setSignature(signature);
+            user.setAvatar(avatar);
+
             userRepository.update(user);
         }
 

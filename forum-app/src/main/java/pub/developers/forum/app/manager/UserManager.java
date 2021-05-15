@@ -92,6 +92,7 @@ public class UserManager extends AbstractLoginManager {
     public void disable(Long uid) {
         User user = userRepository.get(uid);
         CheckUtil.isEmpty(user, ErrorCodeEn.USER_NOT_EXIST);
+        CheckUtil.isEmpty(UserRoleEn.SUPER_ADMIN.equals(user.getRole()), ErrorCodeEn.COMMON_TOKEN_NO_PERMISSION);
 
         user.setState(UserStateEn.DISABLE);
         userRepository.update(user);

@@ -72,16 +72,16 @@ public class UserTransfer {
         return users.stream().map(UserTransfer::buildUserPageResponse).collect(Collectors.toList());
     }
 
-    public static User toGithubUser(JSONObject githubUser, String email) {
+    public static User toGithubUser(JSONObject githubUser, String email, String nickname, String signature, String avatar) {
         return User.builder()
                 .email(email)
                 .state(UserStateEn.UN_ACTIVATION)
                 .source(UserSourceEn.GITHUB)
-                .nickname(githubUser.getString("name"))
+                .nickname(nickname)
                 .password(StringUtil.md5UserPassword(email))
-                .signature(githubUser.getString("bio"))
+                .signature(signature)
                 .role(UserRoleEn.USER)
-                .avatar(githubUser.getString("avatar_url"))
+                .avatar(avatar)
                 .sex(UserSexEn.UNKNOWN)
                 .githubUser(githubUser)
                 .lastLoginTime(new Date())

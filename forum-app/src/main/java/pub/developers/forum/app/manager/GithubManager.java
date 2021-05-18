@@ -35,7 +35,7 @@ public class GithubManager extends AbstractLoginManager {
         String email = ObjectUtils.isEmpty(githubUser.getString("email")) ? loginName + "@github.com" : githubUser.getString("email");
         String nickname = ObjectUtils.isEmpty(githubUser.getString("name")) ? loginName : githubUser.getString("name");
         String signature = ObjectUtils.isEmpty(githubUser.getString("bio")) ? "" : githubUser.getString("bio");
-        String avatar = ObjectUtils.isEmpty(githubUser.getString("avatar_url")) ? "" : githubUser.getString("");
+        String avatar = ObjectUtils.isEmpty(githubUser.getString("avatar_url")) ? "" : githubUser.getString("avatar_url");
 
         User user = userRepository.getByEmail(email);
 

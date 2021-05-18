@@ -8,6 +8,7 @@ import pub.developers.forum.api.model.ResultModel;
 import pub.developers.forum.api.request.github.GithubOauthLoginRequest;
 import pub.developers.forum.api.service.GithubApiService;
 import pub.developers.forum.common.constant.Constant;
+import pub.developers.forum.common.support.LogUtil;
 import pub.developers.forum.portal.support.WebUtil;
 
 import javax.annotation.Resource;
@@ -29,12 +30,16 @@ public class GithubController {
 
     @GetMapping("/oauth-callback")
     public String index(GithubOauthLoginRequest request, HttpServletRequest servletRequest, HttpServletResponse response) {
-        log.info("GithubOauthRequest = {}", request);
+        LogUtil.info(log, "github OauthRequest = {}", request);
         request.setIp(WebUtil.requestIp(servletRequest));
         request.setUa(WebUtil.requestUa(servletRequest));
 
         ResultModel<String> resultModel = githubApiService.oauthLogin(request);
+        if (!resultModel.getSuccess()) {
+            return "redirect:/?toast=" + resultModel.getMessage();
+        }
 
+        WebUtil.cookieAddSid(response, resultModel.getData());
         return "redirect:/?" + Constant.REQUEST_QUERY_TOKEN_KEY + "=" + resultModel.getData();
     }
 }

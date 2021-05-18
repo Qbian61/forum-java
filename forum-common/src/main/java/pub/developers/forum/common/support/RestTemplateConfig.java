@@ -30,14 +30,14 @@ public class RestTemplateConfig {
         builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
         SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(builder.build(), NoopHostnameVerifier.INSTANCE);
 
-        CloseableHttpClient httpClient
-                = HttpClients.custom()
+        CloseableHttpClient httpClient = HttpClients.custom()
                 .setSSLHostnameVerifier(new NoopHostnameVerifier())
-                .setSSLSocketFactory(sslConnectionSocketFactory)
-                .build();
-        HttpComponentsClientHttpRequestFactory requestFactory
-                = new HttpComponentsClientHttpRequestFactory();
+                .setSSLSocketFactory(sslConnectionSocketFactory).build();
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setHttpClient(httpClient);
+        requestFactory.setConnectTimeout(3000);
+        requestFactory.setReadTimeout(3000);
+        requestFactory.setConnectionRequestTimeout(3000);
 
         return new RestTemplate(requestFactory);
     }

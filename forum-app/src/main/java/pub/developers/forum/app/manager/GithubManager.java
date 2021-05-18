@@ -31,10 +31,11 @@ public class GithubManager extends AbstractLoginManager {
         // 获取 user info = {"login":"Qbian61","id":16890764,"node_id":"MDQ6VXNlcjE2ODkwNzY0","avatar_url":"https://avatars.githubusercontent.com/u/16890764?v=4","gravatar_id":"","url":"https://api.github.com/users/Qbian61","html_url":"https://github.com/Qbian61","followers_url":"https://api.github.com/users/Qbian61/followers","following_url":"https://api.github.com/users/Qbian61/following{/other_user}","gists_url":"https://api.github.com/users/Qbian61/gists{/gist_id}","starred_url":"https://api.github.com/users/Qbian61/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/Qbian61/subscriptions","organizations_url":"https://api.github.com/users/Qbian61/orgs","repos_url":"https://api.github.com/users/Qbian61/repos","events_url":"https://api.github.com/users/Qbian61/events{/privacy}","received_events_url":"https://api.github.com/users/Qbian61/received_events","type":"User","site_admin":false,"name":"Qbian","company":null,"blog":"","location":null,"email":"15620608572@163.com","hireable":null,"bio":"打工人","twitter_username":null,"public_repos":6,"public_gists":0,"followers":22,"following":4,"created_at":"2016-01-26T02:17:29Z","updated_at":"2021-05-15T05:10:24Z","private_gists":0,"total_private_repos":3,"owned_private_repos":2,"disk_usage":20878,"collaborators":1,"two_factor_authentication":false,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
         JSONObject githubUser = githubService.getUserInfo(request.getCode());
 
-        String email = githubUser.getString("email");
-        String nickname = githubUser.getString("name");
-        String signature = githubUser.getString("bio");
-        String avatar = githubUser.getString("avatar_url");
+        String loginName = githubUser.getString("login");
+        String email = ObjectUtils.isEmpty(githubUser.getString("email")) ? loginName + "@github.com" : githubUser.getString("email");
+        String nickname = ObjectUtils.isEmpty(githubUser.getString("name")) ? loginName : githubUser.getString("name");
+        String signature = ObjectUtils.isEmpty(githubUser.getString("bio")) ? "" : githubUser.getString("bio");
+        String avatar = ObjectUtils.isEmpty(githubUser.getString("avatar_url")) ? "" : githubUser.getString("");
 
         User user = userRepository.getByEmail(email);
 

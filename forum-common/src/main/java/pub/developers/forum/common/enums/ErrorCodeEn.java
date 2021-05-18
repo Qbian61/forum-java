@@ -19,6 +19,7 @@ public enum ErrorCodeEn {
     NO_PERMISSION(9993, "无操作权限"),
     REPEAT_OPERATION(9992, "重复操作"),
     OPERATION_DATA_NOT_EXIST(9991, "操作数据不存在"),
+    GITHUB_OAUTH_ERROR(9990, "github 授权异常"),
 
     // 0500~0750 common error
     COMMON_CACHE_KEY_EMPTY(8999, "缓存 key 不能为空"),

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import pub.developers.forum.common.enums.ErrorCodeEn;
+import pub.developers.forum.common.support.CheckUtil;
 import pub.developers.forum.common.support.GlobalViewConfig;
 import pub.developers.forum.common.support.LogUtil;
 import pub.developers.forum.domain.service.GithubService;
@@ -39,9 +41,13 @@ public class GithubServiceImpl implements GithubService {
 
     @Override
     public JSONObject getUserInfo(String code) {
-        String token = getAccessToken(code);
-
-        return getUser(token);
+        try {
+            String token = getAccessToken(code);
+            return getUser(token);
+        } catch (Exception e) {
+            CheckUtil.isTrue(true, ErrorCodeEn.GITHUB_OAUTH_ERROR);
+        }
+        return null;
     }
 
     private JSONObject getUser(String token) {
@@ -52,6 +58,7 @@ public class GithubServiceImpl implements GithubService {
         headers.add("Authorization", "token " + token);
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
+        LogUtil.info(log, "github getUser url={}, httpEntity={}", url, JSON.toJSONString(httpEntity));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
 
         String userBody = responseEntity.getBody();
@@ -67,6 +74,7 @@ public class GithubServiceImpl implements GithubService {
         headers.add("accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
+        LogUtil.info(log, "github getAccessToken url={}, httpEntity={}", url, JSON.toJSONString(httpEntity));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
         String tokenBody = responseEntity.getBody();

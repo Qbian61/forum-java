@@ -71,6 +71,7 @@ public class IndexController {
 
         model.addAttribute("currentDomain", WebConst.DOMAIN_ARTICLE);
         model.addAttribute("toast", request.getToast());
+        model.addAttribute("token", request.getToken());
 
         ResultModel<List<ConfigResponse>> configResult = configApiService.queryAvailable(Sets.newHashSet(ConfigTypeEn.HOME_CAROUSEL.getValue()
                 , ConfigTypeEn.SIDEBAR_CAROUSEL.getValue()));

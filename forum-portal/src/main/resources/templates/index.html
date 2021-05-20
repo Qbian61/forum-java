@@ -59,6 +59,9 @@
     if ($('#body')[0].dataset && $('#body')[0].dataset.toastMessage) {
         toastr.error($('#body')[0].dataset.toastMessage);
     }
+    if ($('#body')[0].dataset && $('#body')[0].dataset.token) {
+        localStorage.setItem('token', $('#body')[0].dataset.token);
+    }
 </script>
 </body>
 </html>

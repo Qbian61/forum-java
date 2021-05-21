@@ -3,7 +3,7 @@
 <div th:replace="include/header :: head(~{::title}, ~{}, ~{})">
     <title th:text="${globalConfig.websiteName}">开发者客栈</title>
 </div>
-<body id="body" th:data-toast-message="${toast}">
+<body id="body" th:data-toast-message="${toast}" th:data-token="${token}">
 <div th:replace="include/navbar :: header"></div>
 
 <div th:replace="include/container :: container_both(~{::left}, ~{::right})">

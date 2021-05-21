@@ -52,8 +52,12 @@ public class GithubManager extends AbstractLoginManager {
             user.setSource(UserSourceEn.GITHUB);
             user.setGithubUser(githubUser);
             user.setNickname(nickname);
-            user.setSignature(signature);
-            user.setAvatar(avatar);
+            if (!ObjectUtils.isEmpty(signature)) {
+                user.setSignature(signature);
+            }
+            if (!ObjectUtils.isEmpty(avatar)) {
+                user.setAvatar(avatar);
+            }
 
             userRepository.update(user);
         }

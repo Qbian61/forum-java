@@ -45,4 +45,11 @@ public class Pair<T> {
         return diffTags;
     }
 
+    public static Set<Long> tagToLong(Set<Tag> ones) {
+        Set<Long> tags = new HashSet<>();
+        SafesUtil.ofSet(ones).forEach(oldTag -> {
+            tags.add(oldTag.getId());
+        });
+        return tags;
+    }
 }

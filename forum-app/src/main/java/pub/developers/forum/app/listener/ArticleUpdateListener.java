@@ -41,6 +41,10 @@ public class ArticleUpdateListener extends EventBus.EventHandler<Pair<Article>> 
             articleTypeRepository.increaseRefCount(newArticle.getType().getId());
         }
 
+        // 由于ArticleManager里已经减了一遍标签的引用计数，需把原来的加回来
+        Set<Long> oldTags=Pair.tagToLong(oldArticle.getTags());
+        tagRepository.increaseRefCount(oldTags);
+
         // 更新标签引用计数
         Set<Long> addTags = Pair.diff(newArticle.getTags(), oldArticle.getTags());
         Set<Long> removeTags = Pair.diff(oldArticle.getTags(), newArticle.getTags());

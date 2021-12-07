@@ -237,11 +237,3 @@ spring boot框架开发的社区：https://www.developers.pub
 # 九 安装
 
 请参考 [forum-java安装指南](https://www.developers.pub/article/171)。
-
-
-# 十 授权
-
-- 社区版：使用 AGPL 开源，如果你选择使用社区版，则必须完全遵守 AGPL 的相关条款；公司使用必须购买商用授权；
-- 商业版：提供完整源码以便二开，报价 ¥16000，[详情](https://www.developers.pub/article/264) ；
-
-**企业网站、经营性网站、以营利为目的或实现盈利的网站请购买商业版。**

@@ -1,6 +1,8 @@
 # 一 forum-java
 
-spring boot框架开发的社区：https://www.developers.pub
+- 开源版地址：http://42.51.0.196/
+- 商业版二开后地址：https://www.developers.pub
+
 
 # 二 简介
 

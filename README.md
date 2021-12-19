@@ -238,3 +238,7 @@
 # 九 安装
 
 请参考 [forum-java安装指南](https://www.developers.pub/article/171)。
+
+# 使用说明
+
+**社区版只允许个人使用。商业用途请联系作者购买。**

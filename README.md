@@ -237,7 +237,7 @@
 
 # 九 安装
 
-请参考 [forum-java安装指南](https://www.developers.pub/article/171)。
+请参考 [forum-java安装指南](https://www.developers.pub/article/1005736)。
 
 # 使用说明
 

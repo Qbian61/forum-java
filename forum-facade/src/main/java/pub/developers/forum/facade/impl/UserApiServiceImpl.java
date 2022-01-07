@@ -2,6 +2,7 @@ package pub.developers.forum.facade.impl;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pub.developers.forum.api.model.PageRequestModel;
 import pub.developers.forum.api.model.PageResponseModel;
 import pub.developers.forum.api.model.ResultModel;
@@ -18,6 +19,8 @@ import pub.developers.forum.facade.validator.PageRequestModelValidator;
 import pub.developers.forum.facade.validator.UserValidator;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Qiangqiang.Bian
@@ -118,6 +121,13 @@ public class UserApiServiceImpl implements UserApiService {
 
         userManager.updateInfo(request);
 
+        return ResultModelUtil.success();
+    }
+    @Override
+    public ResultModel updateHeadImg(String linkFilenameData) {
+
+
+        userManager.updateHeadimg(linkFilenameData);
         return ResultModelUtil.success();
     }
 

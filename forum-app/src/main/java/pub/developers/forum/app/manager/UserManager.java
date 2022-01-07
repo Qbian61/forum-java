@@ -196,6 +196,25 @@ public class UserManager extends AbstractLoginManager {
         userRepository.update(updateUser);
     }
 
+
+    /**
+     * 用户更新头像
+     * @param request
+     */
+    @IsLogin
+    @Transactional
+    public void updateHeadimg(String linkFilenameData) {
+        User loginUser = LoginUserContext.getUser();
+
+       /* User user = userRepository.getByEmail(request.getEmail());
+        if (!ObjectUtils.isEmpty(user)) {
+            CheckUtil.isFalse(user.getId().equals(loginUser.getId()), ErrorCodeEn.USER_REGISTER_EMAIL_IS_EXIST);
+        }*/
+        loginUser.setAvatar(linkFilenameData);
+        // 更新缓存中登录用户信息
+        updateCacheUser(loginUser);
+        userRepository.update(loginUser);
+    }
     /**
      * 更新登录密码
      * @param request

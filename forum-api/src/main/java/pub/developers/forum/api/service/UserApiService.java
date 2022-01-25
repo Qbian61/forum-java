@@ -8,7 +8,7 @@ import pub.developers.forum.api.request.user.*;
 import pub.developers.forum.api.response.user.UserInfoResponse;
 import pub.developers.forum.api.response.user.UserOptLogPageResponse;
 import pub.developers.forum.api.response.user.UserPageResponse;
-
+import org.springframework.web.multipart.MultipartFile;
 /**
  * @author Qiangqiang.Bian
  * @create 20/7/30
@@ -41,6 +41,8 @@ public interface UserApiService {
     ResultModel logout(UserTokenLogoutRequest request);
 
     ResultModel updateInfo(UserUpdateInfoRequest request);
+
+    ResultModel updateHeadImg(String linkFilenameData);
 
     ResultModel updatePwd(UserUpdatePwdRequest request);
 

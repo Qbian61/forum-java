@@ -11,12 +11,28 @@
         <div style="width: 100%;">
             <div class="row user-info-box">
                 <div class="col-4" style="padding: 0;border-right: 1px solid rgba(0,0,0,.125);">
-                    <div class="d-flex justify-content-center align-self-center" style="height: 110px;padding-top: 15px;">
-                        <img th:alt="${user.nickname}"
-                             th:src="${user.avatar}"
-                             src="https://upload.jianshu.io/users/upload_avatars/19718990/e8504159-2600-4620-b6be-ddaa6fc66457.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
-                             style="width: 80px;height: 80px;border: 1px solid #ddd;border-radius: 50%;"
-                             class="img-fluid" alt="...">
+                    <div class="d-flex justify-content-center align-self-center"  style="height: 110px;padding-top: 15px; margin-left: -80px;">
+                        <div style="position:relative; cursor: pointer;"
+                             onmousemove="document.getElementById('header_hover').style.display='block'"
+                             onmouseleave="document.getElementById('header_hover').style.display='none'">
+
+                            <div style="position: absolute;width: 80px;height: 80px;">
+                                <img th:alt="${user.nickname}"
+                                     th:src="${user.avatar}"
+                                     src="https://upload.jianshu.io/users/upload_avatars/19718990/e8504159-2600-4620-b6be-ddaa6fc66457.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
+                                     style="width: 80px;height: 80px;border: 1px solid #ddd;border-radius: 50%;"
+                                     class="img-fluid"  alt="...">
+                            </div>
+
+                            <img class="header_hover"
+                                 id="header_hover"
+                                 src="https://cdn.cnvtk.com/header_hover.png"
+                                 alt="上传图像"
+                                 data-target="#updateHeadImgModal"
+                                 data-toggle="modal"
+                                 style="display: none;position: absolute;width: 80px;height: 80px;border: 1px solid #ddd;border-radius: 50%;"
+                            >
+                        </div>
                     </div>
                     <div th:text="${user.nickname}"
                          class="text-center"
@@ -67,6 +83,9 @@
         <div th:replace="include/users-card :: users_card('粉丝', '#', ${fansList})"></div>
     </right>
 </div>
+
+
+
 
 <!-- 编辑个人信息 Modal -->
 <div th:if="${isLogin && user.id == loginUser.id}" class="modal fade" id="updateModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="updateModalDropLabel" aria-hidden="true">
@@ -135,9 +154,52 @@
         </div>
     </div>
 </div>
+<!-- 更新个人头像 Modal -->
+<div th:if="${isLogin && user.id == loginUser.id}" class="modal fade" id="updateHeadImgModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="updateHeadImgModalDropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateHeadImgModalDropLabel">更新个人头像</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/user-rest/update-headimg" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <input type="file" id="resumeFile"/><br/>
+                        <button id="uploadHeadimgBtn" type="button" >上传</button><br/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:replace="include/footer :: footer"></div>
 <script>
+    //更新个人头像
+    $('#uploadHeadimgBtn').on('click', function () {
+        var formData = new FormData()
+        formData.append('file', $('#resumeFile')[0].files[0])
+
+        $.ajax({
+            url : '/user-rest/update-headimg',
+            type : 'POST',
+            cache : false,
+            data : formData,
+            processData : false,
+            contentType : false,
+            success : function(result) {
+                setTimeout(function () {
+                    location.reload();
+                }, 500);
+            }
+        });
+    });
+
     // 更新个人信息
     $('#updateUserBtn').on('click', function () {
         var email = $('#userEmail').val();

@@ -2,6 +2,8 @@ package pub.developers.forum.infrastructure.file;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import lombok.Data;
@@ -34,7 +36,10 @@ public class QiNiuFileServiceImpl implements FileService {
 
     @Override
     public String uploadImg(byte[] base64, String key) {
-        UploadManager uploadManager = new UploadManager();
+        // 这个位置需要注意  Region.huanan() 表示的是华南地区， 空间开了那个地区就填那个地区。
+        Configuration cfg = new Configuration(Region.huanan());
+
+        UploadManager uploadManager = new UploadManager(cfg);
         try {
             String token = Auth.create(accessKey, secretKey).uploadToken(bucketName, key);
             CheckUtil.isEmpty(token, ErrorCodeEn.FILE_UPLOAD_FAIL);

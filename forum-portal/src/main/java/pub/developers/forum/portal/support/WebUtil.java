@@ -440,6 +440,11 @@ public class WebUtil {
             img.attr("src", getImgUrl(src));
         }
 
+        Elements scripts = document.getElementsByTag("script");
+        for (Element script : scripts) {
+            script.remove();
+        }
+
         return document.toString();
     }
 

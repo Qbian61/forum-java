@@ -1,7 +1,8 @@
 # 一 部署效果
 
 - 开源版地址：http://42.51.0.196/
-- 商业版二开后地址：https://www.developers.pub
+- 商业版地址：https://www.developers.pub
+- 设计与实现相关文档：https://www.developers.pub/wiki/1050441
 
 # 二 简介
 
@@ -27,7 +28,7 @@
 - 现有的开源社区缺乏实际运营需求的功能，管理功能过于简单，二开成本过高；
 
 
-# 四 功能列表
+# 四 开源版功能列表
 
 ```$xslt
 

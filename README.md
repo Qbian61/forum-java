@@ -1,6 +1,6 @@
 # 一 部署效果
 
-- 开源版地址：http://42.51.0.196/
+- 开源版地址：http://42.51.0.222:8080/
 - 商业版地址：https://www.developers.pub
 - 设计与实现相关文档：https://www.developers.pub/wiki/1050441
 

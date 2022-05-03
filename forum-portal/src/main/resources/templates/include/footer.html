@@ -18,14 +18,15 @@
     <!-- cdn server -->
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/toastr.js/1.3.1/js/toastr.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"></script>
+<!--    <script src="/js/jquery.min.js"></script>-->
+<!--    <script src="/js/bootstrap.min.js"></script>-->
+<!--    <script src="/js/toastr.min.js"></script>-->
+<!--    <script src="/js/md5.min.js"></script>-->
 
     <!-- custom js -->
     <script>
-        feather.replace();
-
         // 登录
         $('#loginBtn').on('click', function () {
             var email = $('#loginEmail').val();
@@ -288,6 +289,13 @@
             document.getElementsByTagName('head')[0].innerHTML = headHTML;
         };
     </script>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        // 放在最后，如果 https://unpkg.com/feather-icons 加载失败，不影响正常页面点击事件
+        feather.replace();
+    </script>
+
 </footer>
 
 </html>

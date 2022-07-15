@@ -3,6 +3,7 @@
 - 开源版地址：http://42.51.0.222:8080/
 - 商业版地址：https://www.developers.pub
 - 设计与实现相关文档：https://www.developers.pub/wiki/1050441
+- 商业版价格：https://developers.pub/wiki/1050441/1083139
 
 # 二 简介
 

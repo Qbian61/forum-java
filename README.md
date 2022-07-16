@@ -2,8 +2,8 @@
 
 # 一 部署效果
 
-- 开源版地址：http://42.51.0.222:8080/
-- 商业版地址：https://www.developers.pub
+- 开源版演示地址：http://42.51.0.222:8080/
+- 商业版演示地址：https://www.developers.pub
 - 设计与实现相关文档：https://www.developers.pub/wiki/1050441
 - 商业版价格：https://developers.pub/wiki/1050441/1083139
 
@@ -14,9 +14,9 @@
 - 面向内容讨论的论坛；
 - 面向知识问答的社区；
 - 100% 开源；
-- 欢迎到 [开发者客栈](https://www.developers.pub/) 官方讨论区了解更多。同时也欢迎关注官方公众号 智猿其说（下图）；
+- 欢迎到 [开发者客栈](https://www.developers.pub/) 官方讨论区了解更多。同时也欢迎关注官方公众号 开发者客栈（下图）；
 
-![image.png](https://static.developers.pub/d6d7135e5dfe4af2b1e7067fe57ac836)
+![image.png](https://static.developers.pub/8122b50b72b94b58b01b859799b97f63.jpeg)
 
 - 感谢 破冰安全实验室 帮忙做的项目安全漏洞扫描，保障这个项目的每个用户可以放心大胆的使用，关注 破冰安全实验室 公众号了解更多安全知识（下图）；
 

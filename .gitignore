@@ -65,6 +65,5 @@ buildNumber.properties
 
 /logs/*
 node_modules/
-vue-admin-dist/
 vue-admin.html
 

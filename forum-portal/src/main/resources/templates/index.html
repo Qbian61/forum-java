@@ -34,14 +34,14 @@
             </div>
         </div>
 
+        <!-- 轮播图 -->
+        <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
+
         <!-- 公告 -->
         <div th:if="${!#lists.isEmpty(sideBarTypes)}"
              th:each="sideBarType : ${sideBarTypes}">
             <div th:replace="include/posts-card :: posts_card(${sideBarType.name}, ${'/?type=' + sideBarType.name}, '/article/', ${sideBarType.postsList})"></div>
         </div>
-
-        <!-- 轮播图 -->
-        <div th:replace="include/carousel :: carousel('side_carousel', ${sideCarouselList})"></div>
 
         <!-- 常见问题 -->
         <div th:replace="include/posts-card :: posts_card('常见问题', '/faq', '/faq/', ${hotFaqList})"></div>

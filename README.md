@@ -1,15 +1,14 @@
-> 联系作者，微信号：developers_pub、微信昵称：Qbian
+> 官网地址：https://www.forumjava.com
 
 # 一 部署效果
 
 - 开源版演示地址：http://opensource.developers.pub
 - 商业版演示地址：https://www.developers.pub
-- 设计与实现相关文档：https://www.developers.pub/wiki/1050441
-- 商业版价格：https://www.developers.pub/wiki/1050441/645
+- 开源版相关文档：https://www.developers.pub/wiki/1166300
 
 # 二 简介
 
-[forum-java](https://www.developers.pub/) 是一个开源的现代化社区平台，它实现了：
+forum-java 是一个开源的现代化社区平台，它实现了：
 
 - 面向内容讨论的论坛；
 - 面向知识问答的社区；
@@ -241,7 +240,7 @@
 
 # 九 安装
 
-请参考 [forum-java安装指南](https://www.developers.pub/article/1005736)。
+请参考 [forum-java安装指南](https://www.developers.pub/wiki/1166300/1005736)。
 
 # 使用说明
 

@@ -7,6 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.safety.Whitelist;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -428,21 +429,22 @@ public class WebUtil {
     }
 
     private String htmlContent(String htmlContent) {
-        String cdnImgStyle = globalViewConfig.getCdnImgStyle();
-        if (ObjectUtils.isEmpty(cdnImgStyle)) {
+        if (ObjectUtils.isEmpty(htmlContent)) {
             return htmlContent;
         }
 
-        Document document = Jsoup.parse(htmlContent);
+        String safeContent = Jsoup.clean(htmlContent, Whitelist.relaxed().addAttributes(":all", "class"));
+
+        String cdnImgStyle = globalViewConfig.getCdnImgStyle();
+        if (ObjectUtils.isEmpty(cdnImgStyle)) {
+            return safeContent;
+        }
+
+        Document document = Jsoup.parse(safeContent);
         Elements imgs = document.getElementsByTag("img");
         for (Element img: imgs) {
             String src = img.attr("src");
             img.attr("src", getImgUrl(src));
-        }
-
-        Elements scripts = document.getElementsByTag("script");
-        for (Element script : scripts) {
-            script.remove();
         }
 
         return document.toString();
